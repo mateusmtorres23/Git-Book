@@ -1,0 +1,160 @@
+/**
+ * Gitbook Prototype - Design Tokens
+ * 02-regras-design.md
+ */
+
+:root {
+  /* ==========================================================================
+     1. Cores de Marca e Superfície (Neutras / Tema Escuro Sofisticado)
+     ========================================================================== */
+  --color-bg: #0d1117;
+  --color-bg-subtle: #161b22;
+  --color-surface: #1f242c;
+  --color-surface-hover: #262c36;
+  --color-surface-active: #2c333f;
+  
+  --color-border: #30363d;
+  --color-border-subtle: #21262d;
+  --color-border-hover: #484f58;
+
+  --color-text: #f0f6fc;
+  --color-text-muted: #8b949e;
+  --color-text-subtle: #6e7681;
+  --color-text-inverse: #0d1117;
+
+  /* Cor primária de destaque / Ação principal */
+  --color-primary: #3b82f6;
+  --color-primary-hover: #2563eb;
+  --color-primary-active: #1d4ed8;
+  --color-primary-subtle: rgba(59, 130, 246, 0.15);
+  --color-primary-border: rgba(59, 130, 246, 0.35);
+  --color-primary-text: #ffffff;
+
+  /* ==========================================================================
+     2. Cores por Papel (Role)
+     ========================================================================== */
+  /* 👑 Gestor: Roxo / Azul-índigo Real (Autoridade e Governança) */
+  --color-role-gestor: #8b5cf6;
+  --color-role-gestor-hover: #7c3aed;
+  --color-role-gestor-bg: rgba(139, 92, 246, 0.15);
+  --color-role-gestor-border: rgba(139, 92, 246, 0.35);
+  --color-role-gestor-text: #c4b5fd;
+
+  /* ✍️ Escritor: Verde Esmeralda (Criação, Produção e Conteúdo) */
+  --color-role-escritor: #10b981;
+  --color-role-escritor-hover: #059669;
+  --color-role-escritor-bg: rgba(16, 185, 129, 0.15);
+  --color-role-escritor-border: rgba(16, 185, 129, 0.35);
+  --color-role-escritor-text: #6ee7b7;
+
+  /* 🔎 Revisor: Âmbar / Laranja Quente (Atenção, Análise e Curadoria) */
+  --color-role-revisor: #f59e0b;
+  --color-role-revisor-hover: #d97706;
+  --color-role-revisor-bg: rgba(245, 158, 11, 0.15);
+  --color-role-revisor-border: rgba(245, 158, 11, 0.35);
+  --color-role-revisor-text: #fcd34d;
+
+  /* ==========================================================================
+     3. Cores de Estado (Status Badges, Diff e Feedback)
+     ========================================================================== */
+  /* Sucesso / Aprovado / Adicionado */
+  --color-status-approved: #22c55e;
+  --color-status-approved-bg: rgba(34, 197, 94, 0.15);
+  --color-status-approved-border: rgba(34, 197, 94, 0.35);
+  --color-status-approved-text: #86efac;
+
+  /* Erro / Rejeitado / Removido */
+  --color-status-rejected: #ef4444;
+  --color-status-rejected-bg: rgba(239, 68, 68, 0.15);
+  --color-status-rejected-border: rgba(239, 68, 68, 0.35);
+  --color-status-rejected-text: #fca5a5;
+
+  /* Pendente / Aguardando */
+  --color-status-pending: #f59e0b;
+  --color-status-pending-bg: rgba(245, 158, 11, 0.15);
+  --color-status-pending-border: rgba(245, 158, 11, 0.35);
+  --color-status-pending-text: #fcd34d;
+
+  /* Neutro / Informativo */
+  --color-status-info: #38bdf8;
+  --color-status-info-bg: rgba(56, 189, 248, 0.15);
+  --color-status-info-border: rgba(56, 189, 248, 0.35);
+  --color-status-info-text: #bae6fd;
+
+  /* Diffs de Git */
+  --color-diff-add-bg: rgba(34, 197, 94, 0.2);
+  --color-diff-add-text: #86efac;
+  --color-diff-remove-bg: rgba(239, 68, 68, 0.2);
+  --color-diff-remove-text: #fca5a5;
+
+  /* ==========================================================================
+     4. Tipografia
+     ========================================================================== */
+  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --font-size-xs: 0.75rem;     /* 12px */
+  --font-size-sm: 0.875rem;    /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;    /* 18px */
+  --font-size-xl: 1.25rem;     /* 20px */
+  --font-size-2xl: 1.5rem;     /* 24px */
+  --font-size-3xl: 1.875rem;   /* 30px */
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+
+  /* ==========================================================================
+     5. Escala de Espaçamento (múltiplos de 4px)
+     ========================================================================== */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-7: 2rem;      /* 32px */
+  --space-8: 2.5rem;    /* 40px */
+  --space-9: 3rem;      /* 48px */
+  --space-10: 4rem;     /* 64px */
+
+  /* ==========================================================================
+     6. Raios de Borda (Border Radius)
+     ========================================================================== */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* ==========================================================================
+     7. Sombras (Shadows) e Elevação
+     ========================================================================== */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.7);
+  --shadow-glow-primary: 0 0 15px rgba(59, 130, 246, 0.35);
+
+  /* ==========================================================================
+     8. Transições
+     ========================================================================== */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ==========================================================================
+     9. Z-Index
+     ========================================================================== */
+  --z-header: 40;
+  --z-dropdown: 50;
+  --z-modal-backdrop: 90;
+  --z-modal: 100;
+  --z-toast: 110;
+}

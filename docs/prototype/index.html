@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gitbook — Plataforma de Escrita Colaborativa Versionada</title>
+  <meta name="description" content="Protótipo do Gitbook: plataforma de escrita colaborativa com branches, commits, merge requests e sugestões editoriais.">
+
+  <!-- Fontes do Google: Inter e JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Estilos da Fundação (02-regras-design.md) -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <!-- Container do Header Global (T0) -->
+  <div id="header-container"></div>
+
+  <!-- Container Principal das Telas (SPA) -->
+  <main id="app-container" role="main"></main>
+
+  <!-- Container do Modal Global -->
+  <div id="modal-container"></div>
+
+  <!-- Scripts: Mock Data, Componentes e Router -->
+  <script src="js/mock-data.js"></script>
+  <script src="js/components/badge.js"></script>
+  <script src="js/components/button.js"></script>
+  <script src="js/components/card.js"></script>
+  <script src="js/components/modal.js"></script>
+  <script src="js/components/header.js"></script>
+  <script src="js/screens/auth.js"></script>
+  <script src="js/screens/books.js"></script>
+  <script src="js/screens/book-hub.js"></script>
+  <script src="js/screens/editor.js"></script>
+  <script src="js/screens/merges.js"></script>
+  <script src="js/screens/suggestions.js"></script>
+  <script src="js/screens/history.js"></script>
+  <script src="js/router.js"></script>
+
+  <!-- Inicialização do Shell da Fundação (Passo 1) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Inicializa o Header Global
+      if (window.Gitbook.components.header) {
+        window.Gitbook.components.header.init();
+      }
+
+      // 2. Inicializa o Router de Rotas
+      if (window.Gitbook.router) {
+        window.Gitbook.router.init();
+      }
+    });
+  </script>
+</body>
+</html>
