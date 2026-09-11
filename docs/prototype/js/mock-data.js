@@ -399,7 +399,25 @@
       if (found) {
         currentUser = { ...found };
         notify('user_changed', currentUser);
+      } else {
+        currentUser.role = role.toLowerCase();
+        currentUser.roleTitle = role.charAt(0).toUpperCase() + role.slice(1);
+        notify('user_changed', currentUser);
       }
+    },
+    registerUser: (userData) => {
+      const newUser = {
+        id: `usr-${Date.now()}`,
+        name: userData.name,
+        email: userData.email,
+        role: 'colaborador',
+        roleTitle: 'Colaborador Global',
+        avatar: '👤'
+      };
+      users.push(newUser);
+      currentUser = { ...newUser };
+      notify('user_changed', currentUser);
+      return newUser;
     },
 
     // Ações de Mock (usadas nos passos seguintes)

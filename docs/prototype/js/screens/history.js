@@ -14,6 +14,13 @@
     search: ''
   };
 
+  function getIconSvg(nameOrKey, size = 14) {
+    if (window.Gitbook && window.Gitbook.icons) {
+      return window.Gitbook.icons.get(nameOrKey, { size, strokeWidth: 1.8 });
+    }
+    return '';
+  }
+
   /**
    * Renderiza a tela de Histórico de Versionamento e Commits (T7)
    * @param {HTMLElement} container - Container onde a tela será montada
@@ -30,7 +37,7 @@
     if (!book) {
       container.innerHTML = `
         <div class="empty-state">
-          <div class="empty-state-icon">⚠️</div>
+          <div class="empty-state-icon">${getIconSvg('alert', 32)}</div>
           <h2 class="empty-state-title">Obra não encontrada</h2>
           <p class="empty-state-desc">Não foi possível carregar o histórico desta obra.</p>
           <a href="#/books" class="btn btn-secondary">Voltar ao Catálogo</a>
@@ -113,7 +120,7 @@
             <!-- Botão de Voltar ao Editor -->
             <div>
               <a href="#/books/${book.id}/editor" class="btn btn-secondary btn-sm" title="Escrever novo commit no editor">
-                <span>✍️</span> Ir ao Editor
+                <span class="btn-icon">${getIconSvg('pen', 13)}</span> Ir ao Editor
               </a>
             </div>
           </div>
@@ -147,7 +154,10 @@
           <div class="filters-left-group">
             <!-- Filtro por Branch -->
             <div class="filter-field">
-              <label for="filter-branch-select" class="filter-label">🌿 Filtrar por Branch:</label>
+              <label for="filter-branch-select" class="filter-label">
+                <span style="display: inline-flex; vertical-align: middle; margin-right: 4px;">${getIconSvg('branch', 14)}</span>
+                Filtrar por Branch:
+              </label>
               <select id="filter-branch-select" class="form-select filter-select">
                 <option value="all" ${currentFilters.branch === 'all' ? 'selected' : ''}>Todas as Branches (${totalCommitsCount})</option>
                 ${branches.map((b) => {
@@ -200,7 +210,7 @@
             </div>
             ${(currentFilters.branch !== 'all' || currentFilters.author !== 'all' || currentFilters.search) ? `
               <button type="button" class="btn btn-ghost btn-sm" id="btn-reset-filters">
-                ✕ Limpar Filtros
+                <span class="btn-icon">${getIconSvg('close', 12)}</span> Limpar Filtros
               </button>
             ` : ''}
           </div>
@@ -210,7 +220,7 @@
         <section class="card history-timeline-card" aria-label="Linha do Tempo Visual">
           <header class="timeline-header">
             <div style="display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 1.1rem;">🌿</span>
+              <span>${getIconSvg('branch', 18)}</span>
               <h2 style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: var(--color-text);">
                 Grafo de Commits & Linha do Tempo
               </h2>
@@ -271,11 +281,11 @@
 
       if (isMerge) {
         nodeClass = 'node-merge';
-        nodeIcon = '🔀';
+        nodeIcon = getIconSvg('merge', 12);
         nodeTitle = 'Merge Commit (Integração de Branch à Main)';
       } else if (isReview) {
         nodeClass = 'node-review';
-        nodeIcon = '🔎';
+        nodeIcon = getIconSvg('inspect', 12);
         nodeTitle = 'Commit de Revisão Editorial Aprovada';
       } else if (!isMain) {
         nodeClass = 'node-branch';
@@ -283,7 +293,7 @@
         nodeTitle = `Commit na branch ${commit.branch}`;
       } else if (isRelease) {
         nodeClass = 'node-main';
-        nodeIcon = '🏷️';
+        nodeIcon = getIconSvg('check', 12);
         nodeTitle = 'Tag de Versão / Release';
       }
 
@@ -326,10 +336,10 @@
 
               <div class="commit-header-right">
                 <span class="commit-branch-tag ${isMain ? 'branch-main' : 'branch-feature'}">
-                  🌿 <code>${escapeHtml(commit.branch)}</code>
+                  ${getIconSvg('branch', 12)} <code>${escapeHtml(commit.branch)}</code>
                 </span>
                 <time class="commit-date-badge" datetime="${commit.date}">
-                  🕒 ${escapeHtml(commit.date)}
+                  ${getIconSvg('clock', 11)} ${escapeHtml(commit.date)}
                 </time>
               </div>
             </header>
@@ -414,11 +424,11 @@
    * Retorna um avatar amigável para o autor
    */
   function getAvatarForAuthor(author) {
-    if (!author) return '👤';
-    if (author.includes('Lucas')) return '👑';
-    if (author.includes('Beatriz') || author.includes('Pedro')) return '🔎';
-    if (author.includes('João') || author.includes('Maria')) return '✍️';
-    return '👤';
+    if (!author) return getIconSvg('user', 14);
+    if (author.includes('Lucas')) return getIconSvg('gestor', 14);
+    if (author.includes('Beatriz') || author.includes('Pedro')) return getIconSvg('revisor', 14);
+    if (author.includes('João') || author.includes('Maria')) return getIconSvg('escritor', 14);
+    return getIconSvg('user', 14);
   }
 
   /**
@@ -450,7 +460,7 @@
             <div>
               <span class="meta-label">Branch de Origem:</span>
               <span class="badge ${isMain ? 'badge-status-approved' : 'badge-status-info'}">
-                🌿 ${escapeHtml(commit.branch)}
+                ${getIconSvg('branch', 12)} ${escapeHtml(commit.branch)}
               </span>
             </div>
           </div>
@@ -465,7 +475,7 @@
             </div>
             <div>
               <span class="meta-label">Data e Hora:</span>
-              <span>🕒 ${escapeHtml(commit.date)}</span>
+              <span>${getIconSvg('clock', 12)} ${escapeHtml(commit.date)}</span>
             </div>
           </div>
 
@@ -479,7 +489,7 @@
 
         <!-- Explicação do Estado do Snapshot -->
         <div class="snapshot-context-banner">
-          <span>📦</span>
+          <span>${getIconSvg('commit', 16)}</span>
           <span>
             ${isMerge
               ? 'Este commit representa a integração validada pelo Gestor, unindo a branch do escritor à linha consolidada.'
@@ -598,9 +608,9 @@
         }
         const copyIcon = btn.querySelector('.copy-icon');
         if (copyIcon) {
-          copyIcon.textContent = '✓';
+          copyIcon.innerHTML = getIconSvg('check', 12);
           setTimeout(() => {
-            copyIcon.textContent = '📋';
+            copyIcon.innerHTML = getIconSvg('commit', 12);
           }, 1500);
         }
       });

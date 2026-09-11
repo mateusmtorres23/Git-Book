@@ -70,7 +70,7 @@
         <!-- Barra de Ferramentas: Busca no client-side -->
         <div class="dashboard-toolbar">
           <div class="search-box-wrapper">
-            <span class="search-icon">🔍</span>
+            <span class="search-icon">${(window.Gitbook.icons || { get: () => '' }).get('search', { size: 15 })}</span>
             <input
               type="search"
               id="books-search-input"
@@ -102,11 +102,12 @@
   function renderBooksGrid(books, totalBooksCount, isGestor) {
     const buttonComp = window.Gitbook.components.button;
     const badgeComp = window.Gitbook.components.badge;
+    const icons = window.Gitbook.icons || { get: () => '' };
 
     if (totalBooksCount === 0) {
       return `
         <div class="empty-state">
-          <div class="empty-state-icon">📚</div>
+          <div class="empty-state-icon">${icons.get('book', { size: 40 })}</div>
           <h2 class="empty-state-title">Nenhuma obra cadastrada ainda</h2>
           <p class="empty-state-desc">
             Comece criando o primeiro livro versionado da plataforma para gerar a branch <code>main</code> e convidar autores.
@@ -119,7 +120,7 @@
     if (books.length === 0) {
       return `
         <div class="empty-state">
-          <div class="empty-state-icon">🔎</div>
+          <div class="empty-state-icon">${icons.get('search', { size: 40 })}</div>
           <h2 class="empty-state-title">Nenhuma obra encontrada</h2>
           <p class="empty-state-desc">
             Nenhum resultado corresponde aos termos da sua busca. Tente palavras-chave diferentes ou limpe o filtro.
@@ -140,6 +141,7 @@
    * Renderiza um card individual de livro reutilizando o padrão visual
    */
   function renderSingleBookCard(book, buttonComp, badgeComp) {
+    const icons = window.Gitbook.icons || { get: () => '' };
     const coverGradient = book.coverGradient || 'linear-gradient(135deg, #1e3a8a, #4338ca)';
     const stats = book.stats || { branchesCount: 1, commitsCount: 1, pendingMerges: 0, pendingSuggestions: 0 };
     const versionLabel = book.version || 'main';
@@ -148,7 +150,7 @@
       text: 'Acessar Livro',
       variant: 'primary',
       size: 'sm',
-      icon: '📖',
+      icon: 'book',
       href: `#/books/${book.id}`,
       className: 'btn-access-book',
       attributes: `data-book-id="${book.id}"`
@@ -163,7 +165,7 @@
         <!-- Capa Visual com Gradiente e Badge de Gênero -->
         <div class="book-card-cover" style="background: ${coverGradient};">
           <span class="badge badge-status-info book-cover-badge">${escapeHtml(book.genre || 'Literatura')}</span>
-          <span class="book-cover-icon">📘</span>
+          <span class="book-cover-icon">${icons.get('book', { size: 28, strokeWidth: 1.5 })}</span>
         </div>
 
         <!-- Conteúdo do Card -->
@@ -173,25 +175,25 @@
 
           <!-- Gestor Responsável -->
           <div class="book-card-manager">
-            <span>👑 Gestor:</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;">${icons.get('crown', { size: 13 })} Gestor:</span>
             <strong>${escapeHtml(book.managerName || 'Lucas Mendes')}</strong>
           </div>
 
           <!-- Métricas Rápidas (Branches, Commits e Status da Main) -->
           <div class="book-metrics-row">
             <span class="metric-chip" title="Branches ativas">
-              <span>🌿</span>
+              ${icons.get('branch', { size: 13 })}
               <strong>${stats.branchesCount}</strong> branches
             </span>
 
             <span class="metric-chip" title="Total de commits registrados">
-              <span>📦</span>
+              ${icons.get('commit', { size: 13 })}
               <strong>${stats.commitsCount}</strong> commits
             </span>
 
             ${stats.pendingMerges > 0 ? `
               <span class="metric-chip" style="border-color: var(--color-status-pending-border); color: var(--color-status-pending-text);" title="Merge Requests pendentes de aprovação">
-                <span>🔀</span>
+                ${icons.get('merge', { size: 13 })}
                 <strong>${stats.pendingMerges}</strong> merges
               </span>
             ` : ''}
@@ -243,8 +245,11 @@
         <div id="create-book-error" style="display: none; margin-bottom: 12px; padding: 10px; background: var(--color-status-rejected-bg); border: 1px solid var(--color-status-rejected-border); border-radius: var(--radius-md); font-size: var(--font-size-xs); color: var(--color-status-rejected-text);"></div>
 
         ${!isGestor ? `
-          <div style="margin-bottom: 16px; padding: 12px; background: var(--color-status-pending-bg); border: 1px solid var(--color-status-pending-border); border-radius: var(--radius-md); font-size: var(--font-size-xs); color: var(--color-status-pending-text);">
-            ⚠️ <strong>Atenção:</strong> Você está visualizando como <strong>${currentUser.name} (${currentUser.role})</strong>. No Gitbook, a criação de novas obras é uma atribuição do 👑 <strong>Gestor</strong>. Ao prosseguir neste protótipo, a obra será criada com sucesso para fins de teste.
+          <div style="margin-bottom: 16px; padding: 12px; background: var(--color-status-pending-bg); border: 1px solid var(--color-status-pending-border); border-radius: var(--radius-md); font-size: var(--font-size-xs); color: var(--color-status-pending-text); display: flex; align-items: flex-start; gap: 8px;">
+            <span style="flex-shrink: 0; margin-top: 1px;">${window.Gitbook.icons ? window.Gitbook.icons.get('alert', { size: 14 }) : ''}</span>
+            <div>
+              <strong>Atenção:</strong> Você está visualizando como <strong>${currentUser.name} (${currentUser.role})</strong>. No Gitbook, a criação de novas obras é uma atribuição do Gestor (${window.Gitbook.icons ? window.Gitbook.icons.get('gestor', 12) : ''} <strong>Gestor</strong>). Ao prosseguir neste protótipo, a obra será criada com sucesso para fins de teste.
+            </div>
           </div>
         ` : ''}
 

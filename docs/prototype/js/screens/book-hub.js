@@ -35,6 +35,7 @@
     const currentUser = mockData.getCurrentUser();
     const isWriter = currentUser.role === 'escritor';
     const isGestor = currentUser.role === 'gestor';
+    const isRevisor = currentUser.role === 'revisor';
 
     // Obter dados associados à obra
     const branches = mockData.getBranches(book.id);
@@ -55,24 +56,164 @@
       pendingSuggestions: pendingSuggestionsCount
     });
 
-    // Botão de Ação Rápida: Abrir Editor
-    const openEditorBtnHtml = buttonComp ? buttonComp.createButton({
-      text: 'Abrir no Editor',
-      variant: 'primary',
-      icon: '✍️',
-      href: `#/books/${book.id}/editor`,
-      id: 'btn-hub-open-editor'
-    }) : `<a href="#/books/${book.id}/editor" class="btn btn-primary">Abrir no Editor</a>`;
+    // Botão de Ação no Hero (Editor para Gestor/Escritor; Sugestões para Revisor)
+    let heroActionBtnHtml = '';
+    if (isRevisor) {
+      heroActionBtnHtml = buttonComp ? buttonComp.createButton({
+        text: 'Painel de Sugestões',
+        variant: 'primary',
+        icon: '🔎',
+        href: `#/books/${book.id}/suggestions`,
+        id: 'btn-hub-open-suggestions'
+      }) : `<a href="#/books/${book.id}/suggestions" class="btn btn-primary">Painel de Sugestões</a>`;
+    } else {
+      heroActionBtnHtml = buttonComp ? buttonComp.createButton({
+        text: 'Abrir no Editor',
+        variant: 'primary',
+        icon: '✍️',
+        href: `#/books/${book.id}/editor`,
+        id: 'btn-hub-open-editor'
+      }) : `<a href="#/books/${book.id}/editor" class="btn btn-primary">Abrir no Editor</a>`;
+    }
 
-    // Botão "Criar Minha Branch" (visível para Escritores)
-    const createBranchBtnHtml = buttonComp ? buttonComp.createButton({
+    // Botão "Criar Minha Branch" (visível apenas para Escritor e Gestor)
+    const createBranchBtnHtml = !isRevisor ? (buttonComp ? buttonComp.createButton({
       text: '+ Criar Minha Branch',
       variant: isWriter ? 'primary' : 'secondary',
       size: 'sm',
       icon: '🌿',
       id: 'btn-open-create-branch',
       attributes: isWriter ? 'title="Criar nova branch de escritor"' : 'title="Recomendado para o papel Escritor"'
-    }) : '<button type="button" class="btn btn-secondary btn-sm" id="btn-open-create-branch">+ Criar Minha Branch</button>';
+    }) : '<button type="button" class="btn btn-secondary btn-sm" id="btn-open-create-branch">+ Criar Minha Branch</button>') : '';
+
+    const icons = window.Gitbook.icons || { render: (x) => x, get: (x) => x };
+
+    // Renderização do Painel de Métricas Avançadas (Apenas Gestor) ou Visão Operacional (Escritor / Revisor)
+    let metricsOrOperationalHtml = '';
+
+    if (isGestor) {
+      metricsOrOperationalHtml = `
+        <!-- Painel de Gestão Editorial Centralizada (Exclusivo Gestor) -->
+        <div style="margin-bottom: var(--space-5); padding: 12px 18px; background-color: var(--color-role-gestor-bg); border: 1px solid var(--color-role-gestor-border); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: var(--radius-md); background: rgba(88, 11, 18, 0.12); color: var(--color-primary);">
+              ${icons.get('crown', { size: 18, strokeWidth: 2 })}
+            </span>
+            <div>
+              <div style="font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); color: var(--color-role-gestor-text);">
+                Painel de Controle Editorial do Gestor
+              </div>
+              <div style="font-size: var(--font-size-xs); color: var(--color-text-muted);">
+                Acesso integral: aprovação de merge requests na branch main, decisões de revisão e métricas completas da obra.
+              </div>
+            </div>
+          </div>
+          <span class="badge badge-role-gestor">Gestão Ativa</span>
+        </div>
+
+        <!-- Painel de Métricas Rápidas (KPIs Avançados) -->
+        <section class="kpi-grid" aria-label="Métricas Rápidas da Obra">
+          <div class="kpi-card">
+            <div class="kpi-icon-box">${icons.get('commit', { size: 18, strokeWidth: 1.8 })}</div>
+            <div class="kpi-data">
+              <span class="kpi-value">${totalCommits}</span>
+              <span class="kpi-label">Total de Commits</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon-box">${icons.get('branch', { size: 18, strokeWidth: 1.8 })}</div>
+            <div class="kpi-data">
+              <span class="kpi-value">${totalBranches}</span>
+              <span class="kpi-label">Branches Ativas</span>
+            </div>
+          </div>
+
+          <div class="kpi-card" style="${pendingMergesCount > 0 ? 'border-color: var(--color-status-pending-border);' : ''}">
+            <div class="kpi-icon-box" style="${pendingMergesCount > 0 ? 'background-color: var(--color-status-pending-bg); color: var(--color-status-pending-text);' : ''}">${icons.get('merge', { size: 18, strokeWidth: 1.8 })}</div>
+            <div class="kpi-data">
+              <span class="kpi-value" style="${pendingMergesCount > 0 ? 'color: var(--color-status-pending-text);' : ''}">${pendingMergesCount}</span>
+              <span class="kpi-label">Merges Pendentes</span>
+            </div>
+          </div>
+
+          <div class="kpi-card" style="${pendingSuggestionsCount > 0 ? 'border-color: var(--color-role-revisor-border);' : ''}">
+            <div class="kpi-icon-box" style="${pendingSuggestionsCount > 0 ? 'background-color: var(--color-role-revisor-bg); color: var(--color-role-revisor-text);' : ''}">${icons.get('inspect', { size: 18, strokeWidth: 1.8 })}</div>
+            <div class="kpi-data">
+              <span class="kpi-value" style="${pendingSuggestionsCount > 0 ? 'color: var(--color-role-revisor-text);' : ''}">${pendingSuggestionsCount}</span>
+              <span class="kpi-label">Sugestões de Revisão</span>
+            </div>
+          </div>
+        </section>
+      `;
+    } else if (isWriter) {
+      metricsOrOperationalHtml = `
+        <!-- Visão Operacional Simplificada: Escritor -->
+        <section class="operational-panel" aria-label="Visão Operacional do Escritor">
+          <div class="operational-panel-info">
+            <div class="operational-panel-icon writer">${icons.get('pen', { size: 20, strokeWidth: 1.8 })}</div>
+            <div>
+              <div class="operational-panel-title">Ambiente de Trabalho do Escritor</div>
+              <div class="operational-panel-desc">
+                Crie novos capítulos ou continue sua redação em branch dedicada. Suas alterações ficam salvas com segurança no histórico e podem ser submetidas para avaliação via Merge Request.
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: var(--font-size-xs);">
+                <span class="badge badge-role-escritor">Escritor Ativo</span>
+                <span style="color: var(--color-text-muted);">Sua branch sugerida: <code>writer/${currentUser.name.toLowerCase().replace(/\s+/g, '-')}</code></span>
+              </div>
+            </div>
+          </div>
+          <div class="operational-panel-actions">
+            <a href="#/books/${book.id}/editor" class="btn btn-primary btn-sm">
+              <span class="btn-icon">${icons.get('pen', { size: 14, strokeWidth: 2 })}</span>
+              <span>Continuar no Editor</span>
+            </a>
+          </div>
+        </section>
+      `;
+    } else if (isRevisor) {
+      metricsOrOperationalHtml = `
+        <!-- Visão Operacional Simplificada: Revisor -->
+        <section class="operational-panel" aria-label="Visão Operacional do Revisor">
+          <div class="operational-panel-info">
+            <div class="operational-panel-icon reviewer">${icons.get('inspect', { size: 20, strokeWidth: 1.8 })}</div>
+            <div>
+              <div class="operational-panel-title">Painel de Curadoria e Revisão Textual</div>
+              <div class="operational-panel-desc">
+                Seu foco como Revisor é avaliar a consistência da linha consolidada (<code>${book.mainBranch}</code>). Proponha melhorias ortográficas, ajustes de enredo ou coerência diretamente pelo Painel de Sugestões.
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: var(--font-size-xs);">
+                <span class="badge badge-role-revisor">Revisor Ativo</span>
+                <span style="color: var(--color-text-muted);">
+                  ${pendingSuggestionsCount > 0 ? `<strong>${pendingSuggestionsCount}</strong> sugestão(ões) ativa(s) na obra` : 'Nenhuma sugestão pendente no momento'}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="operational-panel-actions">
+            <a href="#/books/${book.id}/suggestions" class="btn btn-primary btn-sm">
+              <span class="btn-icon">${icons.get('inspect', { size: 14, strokeWidth: 2 })}</span>
+              <span>Abrir Painel de Sugestões</span>
+            </a>
+          </div>
+        </section>
+      `;
+    } else {
+      metricsOrOperationalHtml = `
+        <!-- Visão Operacional: Colaborador Geral -->
+        <section class="operational-panel" aria-label="Visão Geral do Colaborador">
+          <div class="operational-panel-info">
+            <div class="operational-panel-icon neutral">${icons.get('user', { size: 20, strokeWidth: 1.8 })}</div>
+            <div>
+              <div class="operational-panel-title">Visão do Colaborador</div>
+              <div class="operational-panel-desc">
+                Acompanhe o desenvolvimento desta obra literária colaborativa. Utilize o seletor <em>Simular Papel</em> no menu superior para experimentar a perspectiva de Gestor, Escritor ou Revisor.
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+    }
 
     container.innerHTML = `
       <div class="book-hub" id="book-hub-container">
@@ -98,7 +239,7 @@
 
               <div class="book-hub-meta-row">
                 <div>
-                  <span>👑 Gestor Responsável:</span>
+                  <span style="display: inline-flex; align-items: center; gap: 4px;">${icons ? icons.get('gestor', 13) : ''} Gestor Responsável:</span>
                   <strong>${escapeHtml(book.managerName || 'Lucas Mendes')}</strong>
                 </div>
                 <div>•</div>
@@ -115,45 +256,13 @@
             </div>
 
             <div class="book-hub-hero-actions">
-              ${openEditorBtnHtml}
+              ${heroActionBtnHtml}
             </div>
           </div>
         </article>
 
-        <!-- Painel de Métricas Rápidas (KPIs) -->
-        <section class="kpi-grid" aria-label="Métricas Rápidas da Obra">
-          <div class="kpi-card">
-            <div class="kpi-icon-box">📦</div>
-            <div class="kpi-data">
-              <span class="kpi-value">${totalCommits}</span>
-              <span class="kpi-label">Total de Commits</span>
-            </div>
-          </div>
-
-          <div class="kpi-card">
-            <div class="kpi-icon-box">🌿</div>
-            <div class="kpi-data">
-              <span class="kpi-value">${totalBranches}</span>
-              <span class="kpi-label">Branches Ativas</span>
-            </div>
-          </div>
-
-          <div class="kpi-card" style="${pendingMergesCount > 0 ? 'border-color: var(--color-status-pending-border);' : ''}">
-            <div class="kpi-icon-box" style="${pendingMergesCount > 0 ? 'background-color: var(--color-status-pending-bg); color: var(--color-status-pending-text);' : ''}">🔀</div>
-            <div class="kpi-data">
-              <span class="kpi-value" style="${pendingMergesCount > 0 ? 'color: var(--color-status-pending-text);' : ''}">${pendingMergesCount}</span>
-              <span class="kpi-label">Merges Pendentes</span>
-            </div>
-          </div>
-
-          <div class="kpi-card" style="${pendingSuggestionsCount > 0 ? 'border-color: var(--color-role-revisor-border);' : ''}">
-            <div class="kpi-icon-box" style="${pendingSuggestionsCount > 0 ? 'background-color: var(--color-role-revisor-bg); color: var(--color-role-revisor-text);' : ''}">🔎</div>
-            <div class="kpi-data">
-              <span class="kpi-value" style="${pendingSuggestionsCount > 0 ? 'color: var(--color-role-revisor-text);' : ''}">${pendingSuggestionsCount}</span>
-              <span class="kpi-label">Sugestões de Revisão</span>
-            </div>
-          </div>
-        </section>
+        <!-- Métricas Avançadas (Gestor) OU Visão Operacional (Escritor / Revisor) -->
+        ${metricsOrOperationalHtml}
 
         <!-- Layout em 2 Colunas: Branches em Destaque & Feed de Atividades Recentes -->
         <div class="hub-columns-layout">
@@ -161,7 +270,7 @@
           <section class="card" aria-label="Branches em Destaque">
             <header class="card-header">
               <div>
-                <h2 class="card-title">🌿 Branches em Destaque</h2>
+                <h2 class="card-title" style="display: flex; align-items: center; gap: 8px;">${icons ? icons.get('branch', 16) : ''} Branches em Destaque</h2>
                 <p class="card-subtitle">Linha principal consolidada e ramificações ativas dos escritores.</p>
               </div>
               <div>
@@ -171,7 +280,7 @@
 
             <div class="card-body">
               <div class="branches-card-list">
-                ${branches.map((b) => renderBranchItem(b, book.id)).join('')}
+                ${branches.map((b) => renderBranchItem(b, book.id, isRevisor)).join('')}
               </div>
             </div>
           </section>
@@ -180,7 +289,7 @@
           <section class="card" aria-label="Feed de Atividades Recentes">
             <header class="card-header">
               <div>
-                <h2 class="card-title">⚡ Atividades Recentes</h2>
+                <h2 class="card-title" style="display: flex; align-items: center; gap: 8px;">${icons ? icons.get('history', 16) : ''} Atividades Recentes</h2>
                 <p class="card-subtitle">Últimos commits e solicitações de merge na obra.</p>
               </div>
             </header>
@@ -205,9 +314,14 @@
 
   /**
    * Renderiza a barra de subnavegação em abas
+   * Restringe abas de escrita para o papel Revisor
    */
   function renderSubnavigation(bookId, activeTab = 'overview', badges = {}) {
-    const tabs = [
+    const mockData = window.Gitbook.mockData;
+    const currentUser = mockData ? mockData.getCurrentUser() : { role: 'gestor' };
+    const isRevisor = currentUser && currentUser.role === 'revisor';
+
+    let tabs = [
       { id: 'overview', label: 'Visão Geral', icon: '📖', href: `#/books/${bookId}`, badge: null },
       { id: 'editor', label: 'Editor de Escrita', icon: '✍️', href: `#/books/${bookId}/editor`, badge: null },
       { id: 'merges', label: 'Merge Requests', icon: '🔀', href: `#/books/${bookId}/merges`, badge: badges.pendingMerges },
@@ -215,16 +329,24 @@
       { id: 'history', label: 'Histórico', icon: '📜', href: `#/books/${bookId}/history`, badge: null }
     ];
 
+    // Revisor não deve ter acesso ao Editor de Escrita nem visualizar sua aba
+    if (isRevisor) {
+      tabs = tabs.filter((t) => t.id !== 'editor');
+    }
+
+    const icons = window.Gitbook.icons;
+
     const tabsHtml = tabs.map((tab) => {
       const isActive = tab.id === activeTab;
       const badgeHtml = tab.badge > 0
         ? `<span class="subnav-tab-badge">${tab.badge}</span>`
         : '';
+      const iconHtml = icons ? icons.render(tab.icon, { size: 15, strokeWidth: 1.8 }) : tab.icon;
 
       return `
         <li class="subnav-tab-item">
           <a href="${tab.href}" class="subnav-tab-link ${isActive ? 'active' : ''}">
-            <span>${tab.icon}</span>
+            <span class="subnav-tab-icon">${iconHtml}</span>
             <span>${tab.label}</span>
             ${badgeHtml}
           </a>
@@ -244,18 +366,23 @@
   /**
    * Renderiza uma linha de branch
    */
-  function renderBranchItem(branch, bookId) {
+  function renderBranchItem(branch, bookId, isRevisor = false) {
     const isMain = branch.name === 'main' || branch.isDefault;
     const badgeComponent = window.Gitbook.components.badge;
+    const icons = window.Gitbook.icons || { get: () => '' };
 
     const badgeHtml = isMain
       ? (badgeComponent ? badgeComponent.createStatusBadge('approved', { label: 'Protegida (main)' }) : '<span class="badge badge-status-approved">main</span>')
       : '<span class="badge badge-status-info">Escritor</span>';
 
+    const branchIcon = isMain
+      ? icons.get('crown', { size: 15, strokeWidth: 1.8 })
+      : icons.get('branch', { size: 15, strokeWidth: 1.8 });
+
     return `
       <div class="branch-list-item">
         <div class="branch-info-left">
-          <span class="branch-type-icon">${isMain ? '👑' : '🌿'}</span>
+          <span class="branch-type-icon">${branchIcon}</span>
           <div>
             <div class="branch-name-text">${escapeHtml(branch.name)}</div>
             <div class="branch-author-text">Autor: <strong>${escapeHtml(branch.author || 'Autor')}</strong></div>
@@ -264,9 +391,11 @@
 
         <div style="display: flex; align-items: center; gap: 8px;">
           ${badgeHtml}
-          <a href="#/books/${bookId}/editor" class="btn btn-secondary btn-sm" title="Editar nesta branch">
-            Editar
-          </a>
+          ${!isRevisor ? `
+            <a href="#/books/${bookId}/editor" class="btn btn-secondary btn-sm" title="Editar nesta branch">
+              Editar
+            </a>
+          ` : ''}
         </div>
       </div>
     `;
@@ -276,12 +405,13 @@
    * Renderiza a lista de atividades recentes combinando commits e merges
    */
   function renderActivityFeed(commits, merges) {
+    const icons = window.Gitbook.icons || { get: () => '' };
     const items = [];
 
     (commits || []).slice(0, 4).forEach((c) => {
       items.push({
         type: 'commit',
-        icon: '📦',
+        icon: icons.get('commit', { size: 14, strokeWidth: 1.8 }),
         title: c.message,
         author: c.author,
         authorRole: c.authorRole || 'escritor',
@@ -294,7 +424,7 @@
     (merges || []).slice(0, 3).forEach((m) => {
       items.push({
         type: 'merge',
-        icon: '🔀',
+        icon: icons.get('merge', { size: 14, strokeWidth: 1.8 }),
         title: `Merge Request: ${m.title}`,
         author: m.author,
         authorRole: m.authorRole || 'escritor',
@@ -376,8 +506,8 @@
           <input type="text" class="form-input" value="${book.mainBranch} (versão oficial)" disabled style="opacity: 0.7;">
         </div>
 
-        <div style="padding: 12px; background-color: var(--color-bg-subtle); border-radius: var(--radius-md); border: 1px solid var(--color-border); font-size: var(--font-size-xs); color: var(--color-text-muted);">
-          🌿 Sua nova branch será criada a partir da <code>${book.mainBranch}</code> consolidada. Suas edições ficarão isoladas até que você solicite um Merge Request ao Gestor (<strong>${book.managerName}</strong>).
+        <div style="padding: 12px; background-color: var(--color-bg-subtle); border-radius: var(--radius-md); border: 1px solid var(--color-border); font-size: var(--font-size-xs); color: var(--color-text-muted); display: flex; align-items: center; gap: 8px;">
+          ${icons ? icons.get('branch', 14) : ''} <span>Sua nova branch será criada a partir da <code>${book.mainBranch}</code> consolidada. Suas edições ficarão isoladas até que você solicite um Merge Request ao Gestor (<strong>${book.managerName}</strong>).</span>
         </div>
 
         <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">

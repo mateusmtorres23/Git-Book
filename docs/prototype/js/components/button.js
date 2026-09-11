@@ -37,7 +37,13 @@
     const sizeClass = size === 'sm' ? 'btn-sm' : size === 'lg' ? 'btn-lg' : '';
     const classes = ['btn', variantClass, sizeClass, className].filter(Boolean).join(' ');
 
-    const iconHtml = icon ? `<span class="btn-icon">${icon}</span>` : '';
+    let renderedIcon = icon;
+    if (icon && window.Gitbook && window.Gitbook.icons) {
+      const iconSize = size === 'sm' ? 14 : size === 'lg' ? 18 : 15;
+      renderedIcon = window.Gitbook.icons.render(icon, { size: iconSize, strokeWidth: 2 });
+    }
+
+    const iconHtml = renderedIcon ? `<span class="btn-icon">${renderedIcon}</span>` : '';
     const content = `${iconHtml}<span class="btn-text">${text}</span>`;
     const idAttr = id ? `id="${id}"` : '';
     const disabledAttr = disabled ? 'disabled' : '';

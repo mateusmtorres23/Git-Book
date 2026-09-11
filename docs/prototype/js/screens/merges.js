@@ -65,6 +65,8 @@
       attributes: 'title="Ir ao Editor para solicitar merge de uma branch"'
     }) : `<a href="#/books/${book.id}/editor" class="btn btn-primary btn-sm">+ Nova Solicitação</a>`;
 
+    const icons = window.Gitbook.icons || { get: () => '' };
+
     container.innerHTML = `
       <div class="merges-page" id="merges-list-page">
         <!-- Subnavegação da Obra -->
@@ -94,13 +96,13 @@
               Todos (${allMerges.length})
             </button>
             <button type="button" class="filter-chip-btn ${activeListFilter === 'pending' ? 'active' : ''}" data-filter="pending">
-              ⏳ Pendentes (${pendingCount})
+              <span class="btn-icon">${icons.get('clock', { size: 12 })}</span> Pendentes (${pendingCount})
             </button>
             <button type="button" class="filter-chip-btn ${activeListFilter === 'approved' ? 'active' : ''}" data-filter="approved">
-              ✓ Aprovados (${approvedCount})
+              <span class="btn-icon">${icons.get('check', { size: 12 })}</span> Aprovados (${approvedCount})
             </button>
             <button type="button" class="filter-chip-btn ${activeListFilter === 'rejected' ? 'active' : ''}" data-filter="rejected">
-              ✕ Rejeitados (${rejectedCount})
+              <span class="btn-icon">${icons.get('close', { size: 12 })}</span> Rejeitados (${rejectedCount})
             </button>
           </div>
 
@@ -120,10 +122,12 @@
   }
 
   function renderMergesListCards(merges, badgeComp) {
+    const icons = window.Gitbook.icons || { get: () => '' };
+
     if (merges.length === 0) {
       return `
         <div class="empty-state">
-          <div class="empty-state-icon">🔀</div>
+          <div class="empty-state-icon" style="display: flex; justify-content: center; margin-bottom: 12px;">${icons.get('merge', { size: 32 })}</div>
           <h2 class="empty-state-title">Nenhum Merge Request encontrado</h2>
           <p class="empty-state-desc">
             Não existem solicitações de integração com o filtro de status selecionado.
@@ -145,15 +149,21 @@
         <a href="#/merges/${mr.id}" class="merge-card-item" id="merge-card-${mr.id}" title="Clique para ver diff e avaliar">
           <div class="merge-item-main-info">
             <div class="merge-item-title-row">
-              <span style="font-size: 1.1rem;">🔀</span>
+              <span style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: var(--radius-md); background: var(--color-bg-subtle); color: var(--color-primary);">
+                ${icons.get('merge', { size: 15, strokeWidth: 1.8 })}
+              </span>
               <h2 class="merge-item-title">${escapeHtml(mr.title)}</h2>
               ${statusBadge}
             </div>
 
             <div class="merge-flow-badge">
-              <span>🌿 ${escapeHtml(mr.sourceBranch)}</span>
+              <span style="display: inline-flex; align-items: center; gap: 4px;">
+                ${icons.get('branch', { size: 13, strokeWidth: 1.8 })} ${escapeHtml(mr.sourceBranch)}
+              </span>
               <span style="color: var(--color-text-muted);">➔</span>
-              <span style="color: var(--color-role-gestor-text); font-weight: 600;">👑 ${escapeHtml(mr.targetBranch || 'main')}</span>
+              <span style="color: var(--color-role-gestor-text); font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                ${icons.get('crown', { size: 13, strokeWidth: 1.8 })} ${escapeHtml(mr.targetBranch || 'main')}
+              </span>
             </div>
 
             <div class="merge-item-meta">
@@ -219,6 +229,7 @@
       : `<span class="badge">${mr.authorRole}</span>`;
 
     const diffStats = mr.diff || { addedLines: 24, removedLines: 6, preview: '+ Trecho de alteração\n- Linha antiga' };
+    const icons = window.Gitbook.icons || { get: () => '' };
 
     container.innerHTML = `
       <div class="merges-page" id="merge-detail-page">
@@ -243,9 +254,13 @@
 
             <!-- Fluxo de Ramificações -->
             <div class="merge-flow-banner">
-              <span title="Branch de origem">🌿 <strong>${escapeHtml(mr.sourceBranch)}</strong></span>
+              <span title="Branch de origem" style="display: inline-flex; align-items: center; gap: 4px;">
+                ${icons.get('branch', { size: 14, strokeWidth: 1.8 })} <strong>${escapeHtml(mr.sourceBranch)}</strong>
+              </span>
               <span style="color: var(--color-text-muted);">➔</span>
-              <span title="Branch de destino" style="color: var(--color-role-gestor-text);">👑 <strong>${escapeHtml(mr.targetBranch || 'main')}</strong></span>
+              <span title="Branch de destino" style="color: var(--color-role-gestor-text); display: inline-flex; align-items: center; gap: 4px;">
+                ${icons.get('crown', { size: 14, strokeWidth: 1.8 })} <strong>${escapeHtml(mr.targetBranch || 'main')}</strong>
+              </span>
             </div>
           </div>
 
@@ -270,7 +285,7 @@
         <section class="diff-viewer-card" aria-label="Comparação de Modificações (Diff)">
           <div class="diff-toolbar">
             <div class="diff-file-info">
-              <span>📄</span>
+              <span style="display: inline-flex; align-items: center;">${icons.get('history', { size: 14, strokeWidth: 1.8 })}</span>
               <span>capitulo-conteudo.md</span>
             </div>
 
@@ -302,7 +317,10 @@
         <section class="card" aria-label="Commits Incluídos">
           <header class="card-header">
             <div>
-              <h2 class="card-title">📦 Commits Incluídos nesta Solicitação</h2>
+              <h2 class="card-title" style="display: flex; align-items: center; gap: 8px;">
+                ${icons.get('commit', { size: 18, strokeWidth: 1.8 })}
+                <span>Commits Incluídos nesta Solicitação</span>
+              </h2>
               <p class="card-subtitle">Histórico de snapshots que serão consolidados na branch <code>${book.mainBranch}</code>.</p>
             </div>
             <span class="badge badge-status-info">${mr.commitsCount || 1} commit(s)</span>
@@ -312,7 +330,7 @@
             <div class="branches-card-list">
               <div class="branch-list-item">
                 <div class="branch-info-left">
-                  <span class="branch-type-icon">📦</span>
+                  <span class="branch-type-icon">${icons.get('commit', { size: 16, strokeWidth: 1.8 })}</span>
                   <div>
                     <div class="branch-name-text">${escapeHtml(mr.title)}</div>
                     <div class="branch-author-text">Autor: <strong>${escapeHtml(mr.author)}</strong> • ${escapeHtml(mr.createdAt)}</div>
@@ -394,13 +412,15 @@
    * Renderiza o painel de decisão do Gestor
    */
   function renderDecisionSection(mr, isGestor, isPending, currentUser, buttonComp) {
+    const icons = window.Gitbook.icons || { get: () => '' };
+
     if (!isPending) {
       const isApproved = mr.status === 'approved';
       return `
         <section class="decision-card ${isApproved ? 'resolved-approved' : 'resolved-rejected'}">
           <header class="decision-header">
-            <h2 class="decision-title">
-              <span>${isApproved ? '✓' : '✕'}</span>
+            <h2 class="decision-title" style="display: flex; align-items: center; gap: 8px;">
+              <span>${isApproved ? icons.get('check', { size: 18, strokeWidth: 2 }) : icons.get('close', { size: 18, strokeWidth: 2 })}</span>
               <span>Solicitação de Merge ${isApproved ? 'Aprovada e Integrada' : 'Rejeitada'}</span>
             </h2>
             <span class="badge ${isApproved ? 'badge-status-approved' : 'badge-status-rejected'}">
@@ -429,32 +449,53 @@
       text: 'Aprovar e Integrar à Main',
       variant: 'primary',
       id: 'btn-decision-approve',
-      icon: '✓',
+      icon: 'check',
       className: 'btn-lg'
-    }) : '<button type="button" class="btn btn-primary btn-lg" id="btn-decision-approve">✓ Aprovar e Integrar à Main</button>';
+    }) : '<button type="button" class="btn btn-primary btn-lg" id="btn-decision-approve">Aprovar e Integrar à Main</button>';
 
     const rejectBtnHtml = buttonComp ? buttonComp.createButton({
       text: 'Rejeitar Merge / Solicitar Ajustes',
       variant: 'danger',
       id: 'btn-decision-reject',
-      icon: '✕'
-    }) : '<button type="button" class="btn btn-danger" id="btn-decision-reject">✕ Rejeitar Merge / Solicitar Ajustes</button>';
+      icon: 'close'
+    }) : '<button type="button" class="btn btn-danger" id="btn-decision-reject">Rejeitar Merge / Solicitar Ajustes</button>';
+
+    if (!isGestor) {
+      return `
+        <section class="decision-card" id="manager-decision-card">
+          <header class="decision-header">
+            <h2 class="decision-title" style="display: flex; align-items: center; gap: 8px;">
+              <span>${icons.get('crown', { size: 18, strokeWidth: 1.8 })}</span>
+              <span>Avaliação Editorial do Gestor</span>
+            </h2>
+            <span class="badge badge-status-pending">Aguardando Avaliação</span>
+          </header>
+
+          <div style="padding: 14px 18px; background: var(--color-bg-subtle); border: 1px solid var(--color-border); border-radius: var(--radius-md); font-size: var(--font-size-sm); color: var(--color-text);">
+            <div style="display: flex; align-items: center; gap: 8px; font-weight: var(--font-weight-semibold); margin-bottom: 6px; color: var(--color-text);">
+              <span style="display: inline-flex; align-items: center;">${icons.get('lock', { size: 15, strokeWidth: 1.8 })}</span>
+              <span>Aprovação e Integração Restritas ao Gestor Editorial</span>
+            </div>
+            <div style="color: var(--color-text-muted); line-height: var(--line-height-normal);">
+              Você está navegando como <strong>${currentUser.name} (${currentUser.role})</strong>. Escritores e revisores têm permissão para acompanhar e auditar as propostas de merge, mas a consolidação na branch oficial (<code>${book.mainBranch}</code>) é prerrogativa exclusiva do Gestor.
+            </div>
+            <div style="margin-top: 10px; font-size: var(--font-size-xs); color: var(--color-primary-text);">
+              💡 Para simular a aprovação deste merge, alterne para o papel de <strong>Gestor</strong> no menu superior.
+            </div>
+          </div>
+        </section>
+      `;
+    }
 
     return `
       <section class="decision-card" id="manager-decision-card">
         <header class="decision-header">
-          <h2 class="decision-title">
-            <span>👑</span>
+          <h2 class="decision-title" style="display: flex; align-items: center; gap: 8px;">
+            <span>${icons.get('crown', { size: 18, strokeWidth: 1.8 })}</span>
             <span>Avaliação Editorial do Gestor</span>
           </h2>
           <span class="badge badge-status-pending">Decisão Pendente</span>
         </header>
-
-        ${!isGestor ? `
-          <div style="padding: 10px 14px; background: var(--color-status-pending-bg); border: 1px solid var(--color-status-pending-border); border-radius: var(--radius-md); font-size: var(--font-size-xs); color: var(--color-status-pending-text);">
-            ℹ️ Você está com o papel <strong>${currentUser.name} (${currentUser.role})</strong> ativo. No Gitbook, a aprovação final é prerrogativa do 👑 <strong>Gestor</strong>. Para testes no protótipo, os botões abaixo estão funcionais para avaliar a transição de estado.
-          </div>
-        ` : ''}
 
         <div class="form-group" style="margin-bottom: 0;">
           <label for="manager-feedback-comment" class="form-label">

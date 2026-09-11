@@ -13,6 +13,13 @@
   let activeChapterId = 'chapter1';
   let hasUnsavedChanges = false;
 
+  function getIconSvg(nameOrKey, size = 14) {
+    if (window.Gitbook && window.Gitbook.icons) {
+      return window.Gitbook.icons.get(nameOrKey, { size, strokeWidth: 1.8 });
+    }
+    return '';
+  }
+
   // Capítulos em memória por livro
   const bookChapters = {
     '1': [
@@ -168,7 +175,7 @@
             <span style="font-size: var(--font-size-sm); color: var(--color-text-muted);">Branch Atual:</span>
 
             <div class="branch-selector-group">
-              <span class="branch-selector-icon">🌿</span>
+              <span class="branch-selector-icon">${getIconSvg('branch', 14)}</span>
               <select id="editor-branch-select" class="branch-select-input" aria-label="Seletor de branch para edição">
                 ${branches.map((b) => `
                   <option value="${escapeHtml(b.name)}" ${b.name === activeBranch ? 'selected' : ''}>
@@ -224,7 +231,7 @@
                 aria-label="Título do capítulo"
               >
               <span id="editor-save-state-badge" class="badge badge-status-info" style="font-size: 0.7rem;">
-                ${hasUnsavedChanges ? '● Não commitado' : '✓ Salvo em snapshot'}
+                ${hasUnsavedChanges ? `${getIconSvg('clock', 11)} Modificações não salvas` : `${getIconSvg('check', 11)} Salvo em snapshot`}
               </span>
             </div>
 
@@ -257,7 +264,7 @@
           <!-- Coluna 3: Painel Lateral de Commit e Versionamento -->
           <aside class="editor-commit-col" aria-label="Painel de Commit">
             <h2 class="commit-panel-title">
-              <span>📦</span> Registrar Commit
+              <span class="commit-panel-icon">${getIconSvg('commit', 16)}</span> Registrar Commit
             </h2>
 
             <!-- Resumo Visual das Modificações -->
@@ -438,7 +445,7 @@
         if (feedbackContainer) {
           feedbackContainer.innerHTML = `
             <div class="commit-success-toast">
-              <span>✓</span>
+              <span>${getIconSvg('check', 16)}</span>
               <div>
                 <strong>Commit registrado!</strong>
                 <div>Hash: <code>${newCommit.hash}</code> na branch <code>${activeBranch}</code></div>
@@ -465,8 +472,8 @@
               <p style="color: var(--color-text); font-size: var(--font-size-sm); margin-bottom: 16px;">
                 Deseja fazer o rebase/merge da versão consolidada mais recente da <code>main</code> para a sua branch <code>${escapeHtml(activeBranch)}</code>?
               </p>
-              <div style="padding: 12px; background: var(--color-bg-subtle); border-radius: var(--radius-md); border: 1px solid var(--color-border); font-size: var(--font-size-xs); color: var(--color-text-muted);">
-                ✓ Nenhuma alteração local será perdida. Sua branch será atualizada com os commits aprovados pelo Gestor.
+              <div style="padding: 12px; background: var(--color-bg-subtle); border-radius: var(--radius-md); border: 1px solid var(--color-border); font-size: var(--font-size-xs); color: var(--color-text-muted); display: flex; align-items: center; gap: 8px;">
+                ${getIconSvg('check', 14)} <span>Nenhuma alteração local será perdida. Sua branch será atualizada com os commits aprovados pelo Gestor.</span>
               </div>
             `,
             footer: `
@@ -481,7 +488,7 @@
               modal.close();
               const syncIndicator = container.querySelector('#editor-sync-indicator');
               if (syncIndicator && window.Gitbook.components.badge) {
-                syncIndicator.innerHTML = window.Gitbook.components.badge.createStatusBadge('approved', { label: '✓ Sincronizado com main' });
+                syncIndicator.innerHTML = window.Gitbook.components.badge.createStatusBadge('approved', { label: 'Sincronizado com main' });
               }
             });
           }
@@ -572,10 +579,10 @@
     if (!badgeEl) return;
     if (hasUnsavedChanges) {
       badgeEl.className = 'badge badge-status-pending';
-      badgeEl.textContent = '● Modificações não salvas';
+      badgeEl.innerHTML = `${getIconSvg('clock', 11)} Modificações não salvas`;
     } else {
       badgeEl.className = 'badge badge-status-info';
-      badgeEl.textContent = '✓ Salvo em snapshot';
+      badgeEl.innerHTML = `${getIconSvg('check', 11)} Salvo em snapshot`;
     }
   }
 

@@ -1,97 +1,105 @@
 /**
  * Gitbook Prototype - Design Tokens
- * 02-regras-design.md
+ * Estética: Apple Minimalist / Pinterest UI
+ * Cores Primárias: Cherry (#4D0909) & Cream (#FFFCF6)
  */
 
 :root {
   /* ==========================================================================
-     1. Cores de Marca e Superfície (Neutras / Tema Escuro Sofisticado)
+     1. Cores de Marca e Superfície (Apple Minimalist / Pinterest Warm Cream)
      ========================================================================== */
-  --color-bg: #0d1117;
-  --color-bg-subtle: #161b22;
-  --color-surface: #1f242c;
-  --color-surface-hover: #262c36;
-  --color-surface-active: #2c333f;
+  /* Fundo principal Cream acolhedor, orgânico e confortável */
+  --color-bg: #F7F2E7;
+  --color-bg-subtle: #EFE7D8;
   
-  --color-border: #30363d;
-  --color-border-subtle: #21262d;
-  --color-border-hover: #484f58;
+  /* Superfícies de Cards e Painéis em Tom Creme Quente (eliminando branco puro) */
+  --color-surface: #FAF5EA;
+  --color-surface-hover: #F2EBDC;
+  --color-surface-active: #E8DEC9;
+  --color-surface-secondary: #EFE7D7;
+  
+  /* Bordas ultrafinas e elegantes em tom areia/creme mineral */
+  --color-border: #E2D7C5;
+  --color-border-subtle: #EBE1D2;
+  --color-border-hover: #CFC1AC;
 
-  --color-text: #f0f6fc;
-  --color-text-muted: #8b949e;
-  --color-text-subtle: #6e7681;
-  --color-text-inverse: #0d1117;
+  /* Tipografia: tons de café e carvão quente (contraste suave e legível) */
+  --color-text: #2B2320;
+  --color-text-muted: #6E635C;
+  --color-text-subtle: #8C8077;
+  --color-text-inverse: #FFFFFF;
 
-  /* Cor primária de destaque / Ação principal */
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
-  --color-primary-active: #1d4ed8;
-  --color-primary-subtle: rgba(59, 130, 246, 0.15);
-  --color-primary-border: rgba(59, 130, 246, 0.35);
-  --color-primary-text: #ffffff;
+  /* Cor Primária de Destaque / Identidade: Vinho / Bordô Profundo Assinatura (#4E050C) */
+  --color-primary: #4E050C;
+  --color-primary-hover: #3B0309;
+  --color-primary-active: #2A0206;
+  --color-primary-subtle: rgba(78, 5, 12, 0.08);
+  --color-primary-border: rgba(78, 5, 12, 0.24);
+  --color-primary-text: #4E050C;
+  --color-primary-bg: #F7E8EA;
 
   /* ==========================================================================
-     2. Cores por Papel (Role)
+     2. Cores por Papel (Tons Pastéis Desaturados e Assinatura da Marca)
      ========================================================================== */
-  /* 👑 Gestor: Roxo / Azul-índigo Real (Autoridade e Governança) */
-  --color-role-gestor: #8b5cf6;
-  --color-role-gestor-hover: #7c3aed;
-  --color-role-gestor-bg: rgba(139, 92, 246, 0.15);
-  --color-role-gestor-border: rgba(139, 92, 246, 0.35);
-  --color-role-gestor-text: #c4b5fd;
+  /* 👑 Gestor: Vinho / Bordô Intenso Assinatura da Marca */
+  --color-role-gestor: #4E050C;
+  --color-role-gestor-hover: #3B0309;
+  --color-role-gestor-bg: #F6E6E8;
+  --color-role-gestor-border: #E5BBC2;
+  --color-role-gestor-text: #4E050C;
 
-  /* ✍️ Escritor: Verde Esmeralda (Criação, Produção e Conteúdo) */
-  --color-role-escritor: #10b981;
-  --color-role-escritor-hover: #059669;
-  --color-role-escritor-bg: rgba(16, 185, 129, 0.15);
-  --color-role-escritor-border: rgba(16, 185, 129, 0.35);
-  --color-role-escritor-text: #6ee7b7;
+  /* ✍️ Escritor: Eucalipto / Sage Green Pastel */
+  --color-role-escritor: #446E5C;
+  --color-role-escritor-hover: #37594A;
+  --color-role-escritor-bg: #EDF5F1;
+  --color-role-escritor-border: #C8DFD4;
+  --color-role-escritor-text: #2D5242;
 
-  /* 🔎 Revisor: Âmbar / Laranja Quente (Atenção, Análise e Curadoria) */
-  --color-role-revisor: #f59e0b;
-  --color-role-revisor-hover: #d97706;
-  --color-role-revisor-bg: rgba(245, 158, 11, 0.15);
-  --color-role-revisor-border: rgba(245, 158, 11, 0.35);
-  --color-role-revisor-text: #fcd34d;
+  /* 🔎 Revisor: Areia / Ocre Suave Pastel */
+  --color-role-revisor: #8C6B3E;
+  --color-role-revisor-hover: #75572F;
+  --color-role-revisor-bg: #F9F4EB;
+  --color-role-revisor-border: #E8DCC8;
+  --color-role-revisor-text: #6B4E26;
 
   /* ==========================================================================
-     3. Cores de Estado (Status Badges, Diff e Feedback)
+     3. Cores de Estado (Badges, Diff e Feedback em Tons Pastéis)
      ========================================================================== */
   /* Sucesso / Aprovado / Adicionado */
-  --color-status-approved: #22c55e;
-  --color-status-approved-bg: rgba(34, 197, 94, 0.15);
-  --color-status-approved-border: rgba(34, 197, 94, 0.35);
-  --color-status-approved-text: #86efac;
+  --color-status-approved: #446E5C;
+  --color-status-approved-bg: #EDF5F1;
+  --color-status-approved-border: #C8DFD4;
+  --color-status-approved-text: #2D5242;
 
   /* Erro / Rejeitado / Removido */
-  --color-status-rejected: #ef4444;
-  --color-status-rejected-bg: rgba(239, 68, 68, 0.15);
-  --color-status-rejected-border: rgba(239, 68, 68, 0.35);
-  --color-status-rejected-text: #fca5a5;
+  --color-status-rejected: #944242;
+  --color-status-rejected-bg: #FDF0F0;
+  --color-status-rejected-border: #E8C8C8;
+  --color-status-rejected-text: #782D2D;
 
   /* Pendente / Aguardando */
-  --color-status-pending: #f59e0b;
-  --color-status-pending-bg: rgba(245, 158, 11, 0.15);
-  --color-status-pending-border: rgba(245, 158, 11, 0.35);
-  --color-status-pending-text: #fcd34d;
+  --color-status-pending: #8C6B3E;
+  --color-status-pending-bg: #F9F4EB;
+  --color-status-pending-border: #E8DCC8;
+  --color-status-pending-text: #6B4E26;
 
   /* Neutro / Informativo */
-  --color-status-info: #38bdf8;
-  --color-status-info-bg: rgba(56, 189, 248, 0.15);
-  --color-status-info-border: rgba(56, 189, 248, 0.35);
-  --color-status-info-text: #bae6fd;
+  --color-status-info: #4A6572;
+  --color-status-info-bg: #EDF2F5;
+  --color-status-info-border: #C8D7DF;
+  --color-status-info-text: #344852;
 
-  /* Diffs de Git */
-  --color-diff-add-bg: rgba(34, 197, 94, 0.2);
-  --color-diff-add-text: #86efac;
-  --color-diff-remove-bg: rgba(239, 68, 68, 0.2);
-  --color-diff-remove-text: #fca5a5;
+  /* Diffs de Git Suaves */
+  --color-diff-add-bg: #EDF5F1;
+  --color-diff-add-text: #2D5242;
+  --color-diff-remove-bg: #FDF0F0;
+  --color-diff-remove-text: #782D2D;
 
   /* ==========================================================================
      4. Tipografia
      ========================================================================== */
-  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-family-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-family-base: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, Monaco, Consolas, monospace;
 
   --font-size-xs: 0.75rem;     /* 12px */
   --font-size-sm: 0.875rem;    /* 14px */
@@ -111,7 +119,7 @@
   --line-height-relaxed: 1.625;
 
   /* ==========================================================================
-     5. Escala de Espaçamento (múltiplos de 4px)
+     5. Escala de Espaçamento
      ========================================================================== */
   --space-1: 0.25rem;   /* 4px */
   --space-2: 0.5rem;    /* 8px */
@@ -125,22 +133,23 @@
   --space-10: 4rem;     /* 64px */
 
   /* ==========================================================================
-     6. Raios de Borda (Border Radius)
+     6. Raios de Borda (Border Radius Suaves)
      ========================================================================== */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
   --radius-full: 9999px;
 
   /* ==========================================================================
-     7. Sombras (Shadows) e Elevação
+     7. Sombras Suaves (Apple Minimalist Shadow Scale)
      ========================================================================== */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.6);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.7);
-  --shadow-glow-primary: 0 0 15px rgba(59, 130, 246, 0.35);
+  --shadow-sm: 0 1px 3px rgba(43, 36, 33, 0.04), 0 1px 2px rgba(43, 36, 33, 0.02);
+  --shadow-md: 0 4px 12px rgba(43, 36, 33, 0.05), 0 1px 3px rgba(43, 36, 33, 0.02);
+  --shadow-lg: 0 10px 24px rgba(77, 9, 9, 0.06), 0 3px 8px rgba(43, 36, 33, 0.03);
+  --shadow-xl: 0 20px 40px rgba(77, 9, 9, 0.08), 0 6px 16px rgba(43, 36, 33, 0.04);
+  --shadow-glow-primary: 0 4px 16px rgba(77, 9, 9, 0.15);
 
   /* ==========================================================================
      8. Transições

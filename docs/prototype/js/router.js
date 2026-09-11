@@ -179,7 +179,13 @@
     } else if (route.screenId === 'T3' && window.Gitbook.screens && window.Gitbook.screens.bookHub) {
       window.Gitbook.screens.bookHub.render(appContainer, params);
     } else if (route.screenId === 'T4' && window.Gitbook.screens && window.Gitbook.screens.editor) {
-      window.Gitbook.screens.editor.render(appContainer, params);
+      const mockData = window.Gitbook.mockData;
+      const currentUser = mockData ? mockData.getCurrentUser() : { role: 'gestor' };
+      if (currentUser && currentUser.role === 'revisor') {
+        renderAccessDeniedScreen(appContainer, params);
+      } else {
+        window.Gitbook.screens.editor.render(appContainer, params);
+      }
     } else if (route.screenId === 'T5a' && window.Gitbook.screens && window.Gitbook.screens.merges) {
       window.Gitbook.screens.merges.renderList(appContainer, params);
     } else if (route.screenId === 'T5b' && window.Gitbook.screens && window.Gitbook.screens.merges) {
@@ -291,6 +297,65 @@
         </div>
       </div>
     `;
+  }
+
+  /**
+   * Renderiza a tela de bloqueio de acesso ao Editor para o papel Revisor
+   */
+  function renderAccessDeniedScreen(container, params) {
+    const bookId = params.id || '1';
+    const mockData = window.Gitbook.mockData;
+    const book = mockData ? mockData.getBookById(bookId) : null;
+    const bookTitle = book ? book.title : 'Obra';
+    const subnavHtml = window.Gitbook.screens && window.Gitbook.screens.bookHub
+      ? window.Gitbook.screens.bookHub.renderSubnavigation(bookId, 'editor')
+      : '';
+
+    container.innerHTML = `
+      <div class="book-hub" id="access-denied-view">
+        ${subnavHtml}
+
+        <div class="access-restricted-container">
+          <div class="access-restricted-card">
+            <div class="access-restricted-icon-box">🚫</div>
+            <h1 class="access-restricted-title">Acesso Restrito ao Editor</h1>
+            <p class="access-restricted-desc">
+              O papel de <strong>Revisor</strong> não possui permissão para acessar o ambiente de escrita nem registrar commits.
+              No Gitbook, revisores atuam na leitura crítica e curadoria da linha oficial através de propostas pontuais.
+            </p>
+
+            <div class="access-restricted-info">
+              <div>💡 <strong>Como colaborar nesta obra (${escapeHtml(bookTitle)}):</strong></div>
+              <ul style="margin-top: 6px; padding-left: 20px; line-height: 1.6;">
+                <li>Acesse o <strong>Painel de Sugestões</strong> para propor correções ortográficas e melhorias de estilo no texto oficial consolidado (<code>${book ? book.mainBranch : 'main'}</code>).</li>
+                <li>Caso deseje escrever capítulos e criar ramificações, alterne para o papel de <strong>Escritor</strong> no menu superior.</li>
+              </ul>
+            </div>
+
+            <div class="access-restricted-actions">
+              <a href="#/books/${bookId}/suggestions" class="btn btn-primary">
+                <span class="btn-icon">${window.Gitbook && window.Gitbook.icons ? window.Gitbook.icons.get('inspect', { size: 14 }) : ''}</span>
+                <span>Ir para Painel de Sugestões</span>
+              </a>
+              <a href="#/books/${bookId}" class="btn btn-secondary">
+                <span>←</span>
+                <span>Voltar ao Hub da Obra</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
   // ==========================================================================

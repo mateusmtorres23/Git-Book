@@ -9,6 +9,13 @@
 
   let currentSelectedSnippet = '';
 
+  function getIconSvg(nameOrKey, size = 14) {
+    if (window.Gitbook && window.Gitbook.icons) {
+      return window.Gitbook.icons.get(nameOrKey, { size, strokeWidth: 1.8 });
+    }
+    return '';
+  }
+
   /**
    * Renderiza a tela de Revisão e Sugestões (T6)
    * @param {HTMLElement} container - Elemento onde a tela será montada
@@ -25,7 +32,7 @@
     if (!book) {
       container.innerHTML = `
         <div class="empty-state">
-          <div class="empty-state-icon">⚠️</div>
+          <div class="empty-state-icon">${getIconSvg('alert', 32)}</div>
           <h2 class="empty-state-title">Obra não encontrada</h2>
           <p class="empty-state-desc">Não foi possível carregar as sugestões editoriais desta obra.</p>
           <a href="#/books" class="btn btn-secondary">Voltar ao Catálogo</a>
@@ -76,8 +83,8 @@
         <!-- Banner de Perspectiva do Papel Ativo (Critério Central de Aceite do Passo 7) -->
         <aside class="role-perspective-banner" aria-label="Perspectiva de Papel">
           <div class="perspective-info">
-            <span style="font-size: 1.3rem;">
-              ${isGestor ? '👑' : isRevisor ? '🔎' : '✍️'}
+            <span style="font-size: 1.3rem; display: inline-flex; align-items: center;">
+              ${isGestor ? getIconSvg('gestor', 22) : isRevisor ? getIconSvg('revisor', 22) : getIconSvg('escritor', 22)}
             </span>
             <div>
               <strong>Perspectiva Ativa: ${badgeComp ? badgeComp.createRoleBadge(currentUser.role) : currentUser.role} (${currentUser.name})</strong>
@@ -109,13 +116,13 @@
               </div>
 
               <div class="reader-badge-branch">
-                <span>🌿</span>
+                <span>${getIconSvg('branch', 14)}</span>
                 <span>Branch Oficial: <code>${book.mainBranch}</code></span>
               </div>
             </header>
 
-            <div style="font-size: var(--font-size-xs); color: var(--color-text-muted); padding: 6px 12px; background: var(--color-bg-subtle); border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle);">
-              ℹ️ <strong>Dica de Interação:</strong> Passe o mouse ou clique nos trechos com marcação âmbar (<mark class="suggestion-highlight" style="padding: 1px 4px; font-size: 0.75rem;">exemplo 🔎</mark>) para localizar a sugestão correspondente no painel. Selecione qualquer trecho com o mouse para propor uma nova sugestão.
+            <div style="font-size: var(--font-size-xs); color: var(--color-text-muted); padding: 6px 12px; background: var(--color-bg-subtle); border-radius: var(--radius-md); border: 1px solid var(--color-border-subtle); display: flex; align-items: center; gap: 8px;">
+              ${getIconSvg('info', 14)} <span><strong>Dica de Interação:</strong> Passe o mouse ou clique nos trechos com marcação âmbar (<mark class="suggestion-highlight" style="padding: 1px 4px; font-size: 0.75rem;">exemplo ${getIconSvg('inspect', 11)}</mark>) para localizar a sugestão correspondente no painel. Selecione qualquer trecho com o mouse para propor uma nova sugestão.</span>
             </div>
 
             <!-- Corpo de Leitura Formatado -->
@@ -128,7 +135,7 @@
           <aside class="suggestions-sidebar-card" id="suggestions-sidebar-panel" aria-label="Painel de Sugestões">
             <div class="sidebar-header">
               <div class="sidebar-title">
-                <span>🔎</span>
+                <span>${getIconSvg('inspect', 15)}</span>
                 <span>Sugestões Editoriais</span>
                 <span class="badge badge-status-info" style="font-size: 0.7rem;">${pendingSuggestions.length} pendentes</span>
               </div>
@@ -159,7 +166,11 @@
       const snippetEscaped = escapeHtml(sug.targetSnippet);
       const isPending = sug.status === 'pending';
       const markerClass = isPending ? 'suggestion-highlight' : 'suggestion-highlight resolved';
-      const statusIcon = sug.status === 'approved' ? '✓' : sug.status === 'rejected' ? '✕' : '🔎';
+      const statusIcon = sug.status === 'approved'
+        ? getIconSvg('check', 11)
+        : sug.status === 'rejected'
+          ? getIconSvg('close', 11)
+          : getIconSvg('inspect', 11);
 
       if (result.includes(snippetEscaped)) {
         const replacement = `<mark class="${markerClass}" data-sug-id="${sug.id}" title="${escapeHtml(sug.category)}: ${escapeHtml(sug.justification)}">${snippetEscaped}<span class="suggestion-marker-icon">${statusIcon}</span></mark>`;
@@ -177,7 +188,7 @@
     if (suggestions.length === 0) {
       return `
         <div class="empty-state" style="padding: 24px 12px;">
-          <div class="empty-state-icon" style="font-size: 2rem;">🔎</div>
+          <div class="empty-state-icon" style="display: flex; justify-content: center; margin-bottom: 12px;">${getIconSvg('inspect', 32)}</div>
           <h3 class="empty-state-title" style="font-size: var(--font-size-base);">Nenhuma sugestão registrada</h3>
           <p class="empty-state-desc" style="font-size: var(--font-size-xs);">
             ${role === 'revisor'
@@ -229,17 +240,17 @@
           ${isGestor && isPending ? `
             <div class="suggestion-card-actions">
               <button type="button" class="btn btn-secondary btn-sm btn-reject-sug" data-sug-id="${sug.id}" title="Recusar alteração">
-                ✕ Rejeitar
+                <span class="btn-icon">${getIconSvg('close', 12)}</span> Rejeitar
               </button>
               <button type="button" class="btn btn-primary btn-sm btn-accept-sug" data-sug-id="${sug.id}" title="Aceitar e aplicar redação">
-                ✓ Aceitar Sugestão
+                <span class="btn-icon">${getIconSvg('check', 12)}</span> Aceitar Sugestão
               </button>
             </div>
           ` : ''}
 
           ${!isGestor && isPending ? `
-            <div style="font-size: 0.7rem; color: var(--color-text-muted); padding-top: 4px; border-top: 1px solid var(--color-border-subtle); text-align: right;">
-              ⏳ Aguardando decisão do Gestor
+            <div style="font-size: 0.7rem; color: var(--color-text-muted); padding-top: 4px; border-top: 1px solid var(--color-border-subtle); text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 4px;">
+              ${getIconSvg('clock', 12)} <span>Aguardando decisão do Gestor</span>
             </div>
           ` : ''}
         </article>
@@ -321,8 +332,8 @@
           ></textarea>
         </div>
 
-        <div style="padding: 10px 14px; background: var(--color-bg-subtle); border-radius: var(--radius-md); border: 1px solid var(--color-border); font-size: var(--font-size-xs); color: var(--color-text-muted);">
-          🔎 Enviada em nome de: <strong>${currentUser.name} (Revisor)</strong>. O Gestor (<strong>${book.managerName}</strong>) receberá uma notificação para aceitar ou rejeitar.
+        <div style="padding: 10px 14px; background: var(--color-bg-subtle); border-radius: var(--radius-md); border: 1px solid var(--color-border); font-size: var(--font-size-xs); color: var(--color-text-muted); display: flex; align-items: center; gap: 8px;">
+          ${getIconSvg('inspect', 14)} <span>Enviada em nome de: <strong>${currentUser.name} (Revisor)</strong>. O Gestor (<strong>${book.managerName}</strong>) receberá uma notificação para aceitar ou rejeitar.</span>
         </div>
 
         <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">

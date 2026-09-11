@@ -12,6 +12,13 @@
    * @param {HTMLElement} container - Elemento onde a tela será montada
    * @param {string} initialMode - 'login' ou 'register'
    */
+  function getIconSvg(nameOrKey, size = 14) {
+    if (window.Gitbook && window.Gitbook.icons) {
+      return window.Gitbook.icons.get(nameOrKey, { size, strokeWidth: 1.8 });
+    }
+    return '';
+  }
+
   function render(container, initialMode = 'login') {
     const buttonComp = window.Gitbook.components.button;
     const badgeComp = window.Gitbook.components.badge;
@@ -53,7 +60,7 @@
 
             <div class="auth-features-list">
               <div class="auth-feature-item">
-                <div class="auth-feature-icon">👑</div>
+                <div class="auth-feature-icon">${getIconSvg('gestor', 20)}</div>
                 <div class="auth-feature-text">
                   <strong>Gestão Editorial & Aprovação de Merges</strong>
                   <span>O Gestor é o guardião da branch principal (<code>main</code>), avaliando solicitações e aprovando cada integração.</span>
@@ -61,7 +68,7 @@
               </div>
 
               <div class="auth-feature-item">
-                <div class="auth-feature-icon">✍️</div>
+                <div class="auth-feature-icon">${getIconSvg('escritor', 20)}</div>
                 <div class="auth-feature-text">
                   <strong>Branches de Escritores sem Conflito</strong>
                   <span>Cada escritor escreve em sua própria ramificação (<code>writer/nome</code>), registrando capítulos em commits auditáveis.</span>
@@ -69,7 +76,7 @@
               </div>
 
               <div class="auth-feature-item">
-                <div class="auth-feature-icon">🔎</div>
+                <div class="auth-feature-icon">${getIconSvg('revisor', 20)}</div>
                 <div class="auth-feature-text">
                   <strong>Curadoria & Sugestões Editoriais</strong>
                   <span>Revisores analisam a versão consolidada e propõem melhorias pontuais sem alterar diretamente o texto principal.</span>
@@ -124,15 +131,15 @@
                 </div>
                 <div class="auth-quick-buttons">
                   <button type="button" class="auth-quick-btn" data-role="gestor" data-email="lucas.gestor@gitbook.com" title="Entrar como Gestor">
-                    <span>👑 Lucas</span>
+                    <span style="display: inline-flex; align-items: center; gap: 4px;">${getIconSvg('gestor', 13)} Lucas</span>
                     <span style="color: var(--color-role-gestor-text); font-weight: 600;">Gestor</span>
                   </button>
                   <button type="button" class="auth-quick-btn" data-role="escritor" data-email="joao.autor@gitbook.com" title="Entrar como Escritor">
-                    <span>✍️ João</span>
+                    <span style="display: inline-flex; align-items: center; gap: 4px;">${getIconSvg('escritor', 13)} João</span>
                     <span style="color: var(--color-role-escritor-text); font-weight: 600;">Escritor</span>
                   </button>
                   <button type="button" class="auth-quick-btn" data-role="revisor" data-email="beatriz.revisora@gitbook.com" title="Entrar como Revisora">
-                    <span>🔎 Beatriz</span>
+                    <span style="display: inline-flex; align-items: center; gap: 4px;">${getIconSvg('revisor', 13)} Beatriz</span>
                     <span style="color: var(--color-role-revisor-text); font-weight: 600;">Revisora</span>
                   </button>
                 </div>
@@ -143,12 +150,11 @@
             <form id="form-register" style="${!isLogin ? 'display: block;' : 'display: none;'}" novalidate>
               <div class="auth-form-header">
                 <h2 class="auth-form-title">Crie sua conta</h2>
-                <p class="auth-form-subtitle">Preencha os dados e escolha seu papel na plataforma.</p>
+                <p class="auth-form-subtitle">Cadastre-se para colaborar nas obras da plataforma.</p>
               </div>
 
               <div id="register-error-msg" style="display: none; margin-bottom: 12px; padding: 10px; background: var(--color-status-rejected-bg); border: 1px solid var(--color-status-rejected-border); border-radius: var(--radius-md); font-size: var(--font-size-xs); color: var(--color-status-rejected-text);"></div>
 
-              <!-- 4 Campos Obrigatórios Conforme Passo 2 -->
               <div class="form-group">
                 <label for="reg-name" class="form-label">Nome Completo</label>
                 <input type="text" id="reg-name" class="form-input" placeholder="Ex: Clara Ribeiro" value="Clara Ribeiro" required>
@@ -167,36 +173,6 @@
               <div class="form-group">
                 <label for="reg-password-confirm" class="form-label">Confirmação de Senha</label>
                 <input type="password" id="reg-password-confirm" class="form-input" placeholder="Repita sua senha" value="senha123" required>
-              </div>
-
-              <!-- Seleção de Perfil Desejado (Gestor / Escritor / Revisor) -->
-              <div class="form-group">
-                <label class="form-label">
-                  <span>Papel Desejado</span>
-                  <span class="form-label-hint">Define suas permissões</span>
-                </label>
-                <div class="role-options-grid">
-                  <label class="role-option-card selected" id="card-role-escritor">
-                    <input type="radio" name="reg-role" value="escritor" class="role-option-radio" checked>
-                    <span class="role-option-icon">✍️</span>
-                    <span class="role-option-title">Escritor</span>
-                    <span class="role-option-desc">Cria branches e capítulos</span>
-                  </label>
-
-                  <label class="role-option-card" id="card-role-gestor">
-                    <input type="radio" name="reg-role" value="gestor" class="role-option-radio">
-                    <span class="role-option-icon">👑</span>
-                    <span class="role-option-title">Gestor</span>
-                    <span class="role-option-desc">Aprova merges e gere obras</span>
-                  </label>
-
-                  <label class="role-option-card" id="card-role-revisor">
-                    <input type="radio" name="reg-role" value="revisor" class="role-option-radio">
-                    <span class="role-option-icon">🔎</span>
-                    <span class="role-option-title">Revisor</span>
-                    <span class="role-option-desc">Propõe melhorias de texto</span>
-                  </label>
-                </div>
               </div>
 
               <div style="margin-top: var(--space-5);">
@@ -224,7 +200,6 @@
     const linkSwitchToLogin = container.querySelector('#link-switch-to-login');
     const linkForgotPassword = container.querySelector('#link-forgot-password');
     const quickLoginBtns = container.querySelectorAll('.auth-quick-btn');
-    const roleCards = container.querySelectorAll('.role-option-card');
 
     function switchToMode(mode) {
       if (mode === 'login') {
@@ -254,16 +229,6 @@
         switchToMode('login');
       });
     }
-
-    // Seleção visual dos cards de papel no cadastro
-    roleCards.forEach((card) => {
-      card.addEventListener('click', () => {
-        roleCards.forEach((c) => c.classList.remove('selected'));
-        card.classList.add('selected');
-        const radio = card.querySelector('input[type="radio"]');
-        if (radio) radio.checked = true;
-      });
-    });
 
     // Login rápido com 1 clique (Lucas, João ou Beatriz)
     quickLoginBtns.forEach((btn) => {
@@ -316,20 +281,20 @@
       });
     }
 
-    // Submissão do Cadastro
+    // Submissão do Cadastro (Neutro / Sem papel fixo)
     if (formRegister) {
       formRegister.addEventListener('submit', (e) => {
         e.preventDefault();
         const nameInput = container.querySelector('#reg-name');
         const emailInput = container.querySelector('#reg-email');
         const passInput = container.querySelector('#reg-password');
+        const passConfirmInput = container.querySelector('#reg-password-confirm');
         const errorEl = container.querySelector('#register-error-msg');
 
         const name = (nameInput.value || '').trim();
         const email = (emailInput.value || '').trim();
         const password = (passInput.value || '').trim();
-        const selectedRadio = container.querySelector('input[name="reg-role"]:checked');
-        const role = selectedRadio ? selectedRadio.value : 'escritor';
+        const passwordConfirm = passConfirmInput ? (passConfirmInput.value || '').trim() : password;
 
         if (!name || !email || !password) {
           if (errorEl) {
@@ -342,13 +307,29 @@
           return;
         }
 
+        if (password.length < 6) {
+          if (errorEl) {
+            errorEl.textContent = '⚠️ A senha deve conter no mínimo 6 caracteres.';
+            errorEl.style.display = 'block';
+          }
+          passInput.focus();
+          return;
+        }
+
+        if (password !== passwordConfirm) {
+          if (errorEl) {
+            errorEl.textContent = '⚠️ As senhas digitadas não coincidem. Verifique a confirmação.';
+            errorEl.style.display = 'block';
+          }
+          if (passConfirmInput) passConfirmInput.focus();
+          return;
+        }
+
         if (errorEl) errorEl.style.display = 'none';
 
+        // Cadastro Neutro: Usuário global sem papel fixo no sistema
         if (window.Gitbook.mockData) {
-          window.Gitbook.mockData.setCurrentRole(role);
-          const currentUser = window.Gitbook.mockData.getCurrentUser();
-          currentUser.name = name;
-          currentUser.email = email;
+          window.Gitbook.mockData.registerUser({ name, email });
         }
 
         // Navega para /books conforme critério de aceite

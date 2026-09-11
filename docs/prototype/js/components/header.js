@@ -36,13 +36,15 @@
       ? badgeComponent.createRoleBadge(currentUser.role)
       : `<span class="badge badge-role-${currentUser.role}">${currentUser.role}</span>`;
 
+    const icons = window.Gitbook.icons || { get: () => '' };
+
     container.innerHTML = `
       <header class="app-header" id="global-header">
         <div class="header-inner">
           <!-- Lado Esquerdo: Logo + Contexto da Obra -->
           <div class="header-left">
             <a href="#/books" class="header-brand" title="Ir para o Dashboard de Livros">
-              <span class="header-brand-icon">📚</span>
+              <span class="header-brand-icon">${icons.get('book', { size: 18, strokeWidth: 2 })}</span>
               <span class="header-brand-title">
                 <span class="brand-git">Git</span><span class="brand-book">book</span>
               </span>
@@ -51,7 +53,7 @@
             ${activeBook ? `
               <span class="header-context-divider">/</span>
               <a href="#/books/${activeBook.id}" class="header-book-context" title="${activeBook.title}">
-                <span class="header-book-icon">📖</span>
+                <span class="header-book-icon">${icons.get('book', { size: 14, strokeWidth: 1.8 })}</span>
                 <span class="header-book-name">${activeBook.title}</span>
               </a>
             ` : ''}
@@ -61,9 +63,10 @@
           <div class="header-role-switch" title="Simular perspectiva de visualização e permissão">
             <span class="header-role-label">Simular Papel:</span>
             <select class="header-role-select" id="role-simulator-select" aria-label="Simular papel de usuário">
-              <option value="gestor" ${currentUser.role === 'gestor' ? 'selected' : ''}>👑 Gestor (Lucas Mendes)</option>
-              <option value="escritor" ${currentUser.role === 'escritor' ? 'selected' : ''}>✍️ Escritor (João Silva)</option>
-              <option value="revisor" ${currentUser.role === 'revisor' ? 'selected' : ''}>🔎 Revisor (Beatriz Costa)</option>
+              ${currentUser.role === 'colaborador' ? `<option value="colaborador" selected>Colaborador Neutro (${currentUser.name})</option>` : ''}
+              <option value="gestor" ${currentUser.role === 'gestor' ? 'selected' : ''}>Gestor (Lucas Mendes)</option>
+              <option value="escritor" ${currentUser.role === 'escritor' ? 'selected' : ''}>Escritor (João Silva)</option>
+              <option value="revisor" ${currentUser.role === 'revisor' ? 'selected' : ''}>Revisor (Beatriz Costa)</option>
             </select>
           </div>
 
@@ -71,7 +74,7 @@
           <div class="header-right">
             <div class="header-user-menu" id="user-menu-wrapper">
               <button type="button" class="user-trigger-btn" id="user-menu-trigger" aria-haspopup="true" aria-expanded="false" title="Abrir menu do usuário">
-                <div class="user-avatar">${currentUser.avatar || '👤'}</div>
+                <div class="user-avatar">${icons.get('user', { size: 16, strokeWidth: 1.8 })}</div>
                 <span class="user-name">${currentUser.name}</span>
                 ${roleBadgeHtml}
                 <span class="user-dropdown-arrow">▼</span>
@@ -86,23 +89,23 @@
                 <ul class="dropdown-menu-list">
                   <li>
                     <a href="#/books" class="dropdown-item" role="menuitem">
-                      <span>📚</span> Minhas Obras
+                      ${icons.get('book', { size: 15 })} <span>Minhas Obras</span>
                     </a>
                   </li>
                   <li>
                     <button type="button" class="dropdown-item" id="btn-user-profile" role="menuitem" style="width: 100%; border: none; background: none; text-align: left; font-family: inherit;">
-                      <span>👤</span> Meu Perfil
+                      ${icons.get('user', { size: 15 })} <span>Meu Perfil</span>
                     </button>
                   </li>
                   <li>
                     <button type="button" class="dropdown-item" id="btn-user-settings" role="menuitem" style="width: 100%; border: none; background: none; text-align: left; font-family: inherit;">
-                      <span>⚙️</span> Configurações
+                      ${icons.get('settings', { size: 15 })} <span>Configurações</span>
                     </button>
                   </li>
                   <li class="dropdown-divider"></li>
                   <li>
                     <a href="#/login" class="dropdown-item danger" role="menuitem">
-                      <span>🚪</span> Sair (Logout)
+                      ${icons.get('logout', { size: 15 })} <span>Sair (Logout)</span>
                     </a>
                   </li>
                 </ul>
@@ -159,8 +162,8 @@
             title: 'Perfil do Usuário',
             body: `
               <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 20px;">
-                <div style="font-size: 2.5rem; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; background: var(--color-surface-hover); border-radius: var(--radius-full); border: 1px solid var(--color-border);">
-                  ${user.avatar}
+                <div style="width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; background: var(--color-surface-hover); border-radius: var(--radius-full); border: 1px solid var(--color-border); color: var(--color-text);">
+                  ${icons.get(user.role || 'user', { size: 28, strokeWidth: 1.8 })}
                 </div>
                 <div>
                   <h3 style="font-size: var(--font-size-lg);">${user.name}</h3>
