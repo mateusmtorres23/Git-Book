@@ -320,6 +320,7 @@
     const mockData = window.Gitbook.mockData;
     const currentUser = mockData ? mockData.getCurrentUser() : { role: 'gestor' };
     const isRevisor = currentUser && currentUser.role === 'revisor';
+    const isGestor = currentUser && currentUser.role === 'gestor';
 
     let tabs = [
       { id: 'overview', label: 'Visão Geral', icon: '📖', href: `#/books/${bookId}`, badge: null },
@@ -328,6 +329,10 @@
       { id: 'suggestions', label: 'Sugestões', icon: '🔎', href: `#/books/${bookId}/suggestions`, badge: badges.pendingSuggestions },
       { id: 'history', label: 'Histórico', icon: '📜', href: `#/books/${bookId}/history`, badge: null }
     ];
+
+    if (isGestor) {
+      tabs.push({ id: 'settings', label: 'Configurações', icon: '⚙️', href: `#/books/${bookId}/settings`, badge: null });
+    }
 
     // Revisor não deve ter acesso ao Editor de Escrita nem visualizar sua aba
     if (isRevisor) {

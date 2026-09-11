@@ -137,6 +137,29 @@
     }
   ];
 
+  const bookCollaborators = {
+    '1': [
+      { userId: 'usr-2', role: 'escritor' },
+      { userId: 'usr-3', role: 'escritor' },
+      { userId: 'usr-4', role: 'revisor' },
+      { userId: 'usr-5', role: 'revisor' }
+    ],
+    '2': [
+      { userId: 'usr-2', role: 'escritor' },
+      { userId: 'usr-4', role: 'revisor' }
+    ],
+    '3': [
+      { userId: 'usr-3', role: 'escritor' },
+      { userId: 'usr-5', role: 'revisor' }
+    ]
+  };
+
+  const bookSettings = {
+    '1': { requireMergeRequest: true, requireReviewerSuggestion: false, deleteBranchAfterMerge: true, visibility: 'private' },
+    '2': { requireMergeRequest: true, requireReviewerSuggestion: true, deleteBranchAfterMerge: true, visibility: 'private' },
+    '3': { requireMergeRequest: true, requireReviewerSuggestion: false, deleteBranchAfterMerge: false, visibility: 'public' }
+  };
+
   // ==========================================================================
   // 3. Branches Mockadas
   // ==========================================================================
@@ -385,6 +408,17 @@
     getMergeRequestById: (id) => mergeRequests.find((m) => String(m.id) === String(id)) || null,
     getSuggestions: (bookId) => suggestions.filter((s) => !bookId || String(s.bookId) === String(bookId)),
     getSuggestionById: (id) => suggestions.find((s) => String(s.id) === String(id)) || null,
+    getBookCollaborators: (bookId) => (bookCollaborators[String(bookId)] || []).map((collaborator) => {
+      const user = users.find((item) => item.id === collaborator.userId);
+      return user ? { ...user, role: collaborator.role, roleTitle: collaborator.role === 'escritor' ? 'Escritor Colaborador' : 'Revisor de Texto' } : null;
+    }).filter(Boolean),
+    getBookSettings: (bookId) => ({
+      requireMergeRequest: true,
+      requireReviewerSuggestion: false,
+      deleteBranchAfterMerge: true,
+      visibility: 'private',
+      ...(bookSettings[String(bookId)] || {})
+    }),
 
     // Alteração de Papel / Usuário Simulado (Exigência central de 01-contexto.md)
     setCurrentUser: (userId) => {
@@ -418,6 +452,75 @@
       currentUser = { ...newUser };
       notify('user_changed', currentUser);
       return newUser;
+    },
+
+    addCollaborator: (bookId, userData) => {
+      const key = String(bookId);
+      bookCollaborators[key] = bookCollaborators[key] || [];
+      const existingUser = users.find((user) => user.email.toLowerCase() === String(userData.email).toLowerCase());
+      const user = existingUser || {
+        id: `usr-${Date.now()}`,
+        name: userData.name || userData.email.split('@')[0],
+        email: userData.email,
+        role: userData.role,
+        roleTitle: userData.role === 'escritor' ? 'Escritor Colaborador' : 'Revisor de Texto',
+        avatar: userData.role === 'escritor' ? '✍️' : '🔎'
+      };
+      if (!existingUser) users.push(user);
+      if (!bookCollaborators[key].some((item) => item.userId === user.id)) {
+        bookCollaborators[key].push({ userId: user.id, role: userData.role });
+      }
+      notify('collaborators_updated', bookId);
+      return { ...user, role: userData.role };
+    },
+
+    updateCollaboratorRole: (bookId, userId, newRole) => {
+      const collaborator = (bookCollaborators[String(bookId)] || []).find((item) => item.userId === userId);
+      if (!collaborator) return null;
+      collaborator.role = newRole;
+      notify('collaborators_updated', bookId);
+      return collaborator;
+    },
+
+    removeCollaborator: (bookId, userId) => {
+      const key = String(bookId);
+      const collaborators = bookCollaborators[key] || [];
+      const index = collaborators.findIndex((item) => item.userId === userId);
+      if (index === -1) return false;
+      collaborators.splice(index, 1);
+      notify('collaborators_updated', bookId);
+      return true;
+    },
+
+    updateBookSettings: (bookId, settingsData) => {
+      const key = String(bookId);
+      bookSettings[key] = { ...(bookSettings[key] || {}), ...settingsData };
+      const book = books.find((item) => String(item.id) === key);
+      if (book) {
+        if (settingsData.title) book.title = settingsData.title;
+        if (settingsData.description) book.description = settingsData.description;
+        if (settingsData.genre) book.genre = settingsData.genre;
+      }
+      notify('book_settings_updated', bookId);
+      return { ...bookSettings[key] };
+    },
+
+    archiveBook: (bookId) => {
+      const book = books.find((item) => String(item.id) === String(bookId));
+      if (!book) return null;
+      book.archived = true;
+      notify('book_settings_updated', bookId);
+      return book;
+    },
+
+    deleteBook: (bookId) => {
+      const index = books.findIndex((item) => String(item.id) === String(bookId));
+      if (index === -1) return false;
+      books.splice(index, 1);
+      delete bookCollaborators[String(bookId)];
+      delete bookSettings[String(bookId)];
+      notify('book_deleted', bookId);
+      return true;
     },
 
     // Ações de Mock (usadas nos passos seguintes)

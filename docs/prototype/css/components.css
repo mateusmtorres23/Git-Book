@@ -2022,6 +2022,77 @@ code, pre {
   animation: dropdownFadeIn 200ms ease;
 }
 
+
+/* ==========================================================================\n+   13. Tela de Configuracoes da Obra (T8)\n+   ========================================================================== */
+.settings-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding-bottom: var(--space-8);
+}
+
+.settings-header,
+.settings-section-header,
+.settings-form-footer,
+.settings-danger-zone {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.settings-header {
+  align-items: flex-start;
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.settings-eyebrow,
+.danger-eyebrow {
+  margin-bottom: var(--space-2);
+  color: var(--color-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.settings-title { font-size: var(--font-size-2xl); color: var(--color-text); }
+.settings-subtitle { margin-top: var(--space-2); color: var(--color-text-muted); }
+.settings-section { gap: var(--space-5); }
+.settings-section-header { align-items: flex-start; }
+.settings-table-wrap { overflow-x: auto; }
+.settings-table { width: 100%; border-collapse: collapse; min-width: 720px; }
+.settings-table th { padding: var(--space-3); color: var(--color-text-muted); font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); text-align: left; text-transform: uppercase; }
+.settings-table td { padding: var(--space-3); border-top: 1px solid var(--color-border-subtle); color: var(--color-text-muted); font-size: var(--font-size-sm); }
+.settings-person, .settings-actions { display: flex; align-items: center; gap: var(--space-3); }
+.settings-person strong { color: var(--color-text); }
+.settings-avatar { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: var(--radius-full); background: var(--color-primary-subtle); }
+.settings-actions .form-select { width: auto; min-width: 120px; padding: var(--space-1) var(--space-2); }
+.settings-empty { padding: var(--space-6) !important; text-align: center; }
+.settings-toggle-list { display: flex; flex-direction: column; }
+.settings-toggle { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-4) 0; border-top: 1px solid var(--color-border-subtle); cursor: pointer; }
+.settings-toggle:first-child { border-top: 0; padding-top: 0; }
+.settings-toggle strong, .settings-toggle small { display: block; }
+.settings-toggle small { margin-top: var(--space-1); color: var(--color-text-muted); font-size: var(--font-size-xs); }
+.settings-toggle-input { position: absolute; opacity: 0; pointer-events: none; }
+.settings-switch { position: relative; flex: 0 0 auto; width: 42px; height: 24px; border-radius: var(--radius-full); background: var(--color-border); transition: background-color var(--transition-fast); }
+.settings-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: var(--radius-full); background: var(--color-surface); box-shadow: var(--shadow-sm); transition: transform var(--transition-fast); }
+.settings-toggle-input:checked + .settings-switch { background: var(--color-primary); }
+.settings-toggle-input:checked + .settings-switch::after { transform: translateX(18px); }
+.settings-form { display: flex; flex-direction: column; }
+.settings-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+.settings-save-status { color: var(--color-status-approved-text); font-size: var(--font-size-sm); }
+.settings-danger-zone { padding: var(--space-5); border: 1px solid var(--color-status-rejected-border); border-radius: var(--radius-lg); background: var(--color-status-rejected-bg); }
+.danger-eyebrow { color: var(--color-status-rejected-text); }
+.settings-danger-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.settings-confirm-title { padding: var(--space-3); border-left: 3px solid var(--color-primary); background: var(--color-bg-subtle); font-weight: var(--font-weight-semibold); }
+
+@media (max-width: 720px) {
+  .settings-header, .settings-section-header, .settings-danger-zone { align-items: stretch; flex-direction: column; }
+  .settings-form-grid { grid-template-columns: 1fr; gap: 0; }
+  .settings-form-footer { align-items: flex-start; flex-direction: column; }
+}
 /* ==========================================================================
    13. Tela de Gestão de Merge Requests (T5a - Lista e T5b - Detalhe/Diff)
    ========================================================================== */

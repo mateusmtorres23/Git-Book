@@ -9,7 +9,7 @@
      1. Cores de Marca e Superfície (Apple Minimalist / Pinterest Warm Cream)
      ========================================================================== */
   /* Fundo principal Cream acolhedor, orgânico e confortável */
-  --color-bg: #F7F2E7;
+   --color-bg: #FFFCF6;
   --color-bg-subtle: #EFE7D8;
   
   /* Superfícies de Cards e Painéis em Tom Creme Quente (eliminando branco puro) */
@@ -30,23 +30,23 @@
   --color-text-inverse: #FFFFFF;
 
   /* Cor Primária de Destaque / Identidade: Vinho / Bordô Profundo Assinatura (#4E050C) */
-  --color-primary: #4E050C;
-  --color-primary-hover: #3B0309;
+   --color-primary: #4D0909;
+   --color-primary-hover: #3B0606;
   --color-primary-active: #2A0206;
   --color-primary-subtle: rgba(78, 5, 12, 0.08);
   --color-primary-border: rgba(78, 5, 12, 0.24);
-  --color-primary-text: #4E050C;
+   --color-primary-text: #4D0909;
   --color-primary-bg: #F7E8EA;
 
   /* ==========================================================================
      2. Cores por Papel (Tons Pastéis Desaturados e Assinatura da Marca)
      ========================================================================== */
   /* 👑 Gestor: Vinho / Bordô Intenso Assinatura da Marca */
-  --color-role-gestor: #4E050C;
-  --color-role-gestor-hover: #3B0309;
+   --color-role-gestor: #4D0909;
+   --color-role-gestor-hover: #3B0606;
   --color-role-gestor-bg: #F6E6E8;
   --color-role-gestor-border: #E5BBC2;
-  --color-role-gestor-text: #4E050C;
+   --color-role-gestor-text: #4D0909;
 
   /* ✍️ Escritor: Eucalipto / Sage Green Pastel */
   --color-role-escritor: #446E5C;

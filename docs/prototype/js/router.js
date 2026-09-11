@@ -47,6 +47,15 @@
       permissions: { gestor: 'Acesso Total', escritor: 'Visualizar / Criar Branch', revisor: 'Visualizar' }
     },
     {
+      path: '/books/:id/settings',
+      screenId: 'T8',
+      title: 'Configurações da Obra',
+      description: 'Gestão de colaboradores, proteção da branch, metadados e zona de perigo.',
+      stepTarget: 'T8',
+      showHeader: true,
+      permissions: { gestor: 'Acesso Total', escritor: 'Acesso Negado', revisor: 'Acesso Negado' }
+    },
+    {
       path: '/books/:id/editor',
       screenId: 'T4',
       title: 'Editor de Conteúdo e Versionamento',
@@ -178,6 +187,13 @@
       window.Gitbook.screens.books.render(appContainer);
     } else if (route.screenId === 'T3' && window.Gitbook.screens && window.Gitbook.screens.bookHub) {
       window.Gitbook.screens.bookHub.render(appContainer, params);
+    } else if (route.screenId === 'T8' && window.Gitbook.screens && window.Gitbook.screens.settings) {
+      const currentUser = window.Gitbook.mockData ? window.Gitbook.mockData.getCurrentUser() : { role: 'gestor' };
+      if (!currentUser || currentUser.role !== 'gestor') {
+        renderAccessDeniedScreen(appContainer, params, 'Configurações da Obra', 'Somente o papel de Gestor pode administrar colaboradores, regras e metadados desta obra.');
+      } else {
+        window.Gitbook.screens.settings.render(appContainer, params);
+      }
     } else if (route.screenId === 'T4' && window.Gitbook.screens && window.Gitbook.screens.editor) {
       const mockData = window.Gitbook.mockData;
       const currentUser = mockData ? mockData.getCurrentUser() : { role: 'gestor' };
@@ -302,11 +318,12 @@
   /**
    * Renderiza a tela de bloqueio de acesso ao Editor para o papel Revisor
    */
-  function renderAccessDeniedScreen(container, params) {
+  function renderAccessDeniedScreen(container, params, title = 'Acesso Restrito ao Editor', description = '') {
     const bookId = params.id || '1';
     const mockData = window.Gitbook.mockData;
     const book = mockData ? mockData.getBookById(bookId) : null;
     const bookTitle = book ? book.title : 'Obra';
+    const isSettingsDenied = Boolean(description);
     const subnavHtml = window.Gitbook.screens && window.Gitbook.screens.bookHub
       ? window.Gitbook.screens.bookHub.renderSubnavigation(bookId, 'editor')
       : '';
@@ -318,24 +335,23 @@
         <div class="access-restricted-container">
           <div class="access-restricted-card">
             <div class="access-restricted-icon-box">🚫</div>
-            <h1 class="access-restricted-title">Acesso Restrito ao Editor</h1>
+            <h1 class="access-restricted-title">${title}</h1>
             <p class="access-restricted-desc">
-              O papel de <strong>Revisor</strong> não possui permissão para acessar o ambiente de escrita nem registrar commits.
-              No Gitbook, revisores atuam na leitura crítica e curadoria da linha oficial através de propostas pontuais.
+              ${description || 'O papel atual não possui permissão para acessar este ambiente.'}
             </p>
 
             <div class="access-restricted-info">
               <div>💡 <strong>Como colaborar nesta obra (${escapeHtml(bookTitle)}):</strong></div>
               <ul style="margin-top: 6px; padding-left: 20px; line-height: 1.6;">
-                <li>Acesse o <strong>Painel de Sugestões</strong> para propor correções ortográficas e melhorias de estilo no texto oficial consolidado (<code>${book ? book.mainBranch : 'main'}</code>).</li>
-                <li>Caso deseje escrever capítulos e criar ramificações, alterne para o papel de <strong>Escritor</strong> no menu superior.</li>
+                <li>${isSettingsDenied ? 'Volte ao Hub da Obra para continuar navegando pelos módulos disponíveis para o seu papel.' : `Acesse o <strong>Painel de Sugestões</strong> para propor correções no texto oficial (${book ? book.mainBranch : 'main'}).`}</li>
+                <li>Alterne o papel simulado no menu superior para testar a visão de Gestor.</li>
               </ul>
             </div>
 
             <div class="access-restricted-actions">
-              <a href="#/books/${bookId}/suggestions" class="btn btn-primary">
+              <a href="${isSettingsDenied ? `#/books/${bookId}` : `#/books/${bookId}/suggestions`}" class="btn btn-primary">
                 <span class="btn-icon">${window.Gitbook && window.Gitbook.icons ? window.Gitbook.icons.get('inspect', { size: 14 }) : ''}</span>
-                <span>Ir para Painel de Sugestões</span>
+                <span>${isSettingsDenied ? 'Voltar ao Hub da Obra' : 'Ir para Painel de Sugestões'}</span>
               </a>
               <a href="#/books/${bookId}" class="btn btn-secondary">
                 <span>←</span>
