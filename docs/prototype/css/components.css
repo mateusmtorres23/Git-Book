@@ -1406,6 +1406,215 @@ code, pre {
   background-color: var(--color-surface);
 }
 
+/* ========================================================================
+   11. Tela de Prazos e Entregas (T9)
+   ======================================================================== */
+.deadlines-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.deadlines-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  padding: var(--space-2) 0;
+}
+
+.deadlines-header h1 {
+  margin: var(--space-1) 0 var(--space-2);
+  color: var(--color-primary-text);
+  font-size: var(--font-size-3xl);
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.deadlines-intro {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.deadlines-summary {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.deadlines-filters {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.deadline-filter {
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--font-size-sm);
+}
+
+.deadline-filter:hover,
+.deadline-filter.active {
+  color: var(--color-primary-text);
+  border-color: var(--color-primary);
+  background: var(--color-role-gestor-bg);
+}
+
+.deadlines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: var(--space-5);
+}
+
+.deadline-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 255px;
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.deadline-card.overdue {
+  border-color: var(--color-status-rejected-border);
+  background: var(--color-status-rejected-bg);
+}
+
+.deadline-card.completed {
+  border-color: var(--color-status-approved-border);
+  background: var(--color-status-approved-bg);
+}
+
+.deadline-card-top,
+.deadline-card-actions,
+.deadline-assignee-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.deadline-card time {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+}
+
+.deadline-card h2 {
+  margin: var(--space-4) 0 var(--space-2);
+  color: var(--color-text);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-tight);
+}
+
+.deadline-card p {
+  flex: 1;
+  margin: 0 0 var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.deadline-assignee-row {
+  justify-content: flex-start;
+  min-height: 36px;
+  margin-bottom: var(--space-4);
+}
+
+.deadline-assignee {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+}
+
+.deadline-assignee strong,
+.deadline-assignee .badge {
+  display: block;
+}
+
+.deadline-assignee .badge {
+  margin-top: 2px;
+  width: max-content;
+  font-size: 0.68rem;
+}
+
+.deadline-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+.deadline-unassigned,
+.deadline-readonly {
+  padding: var(--space-1) var(--space-2);
+  color: var(--color-text-muted);
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+}
+
+.deadline-card-actions {
+  justify-content: flex-start;
+  margin-top: auto;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.deadline-action-group {
+  display: flex;
+  gap: var(--space-1);
+  margin-left: auto;
+}
+
+.deadline-delete {
+  color: var(--color-status-rejected-text);
+}
+
+.deadlines-empty {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 640px) {
+  .deadlines-header h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .deadlines-header .btn {
+    width: 100%;
+  }
+
+  .deadline-card-top,
+  .deadline-card-actions {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
 .subnav-tab-badge {
   font-size: 0.7rem;
   padding: 1px 6px;

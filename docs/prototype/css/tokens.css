@@ -41,21 +41,21 @@
   /* ==========================================================================
      2. Cores por Papel (Tons Pastéis Desaturados e Assinatura da Marca)
      ========================================================================== */
-  /* 👑 Gestor: Vinho / Bordô Intenso Assinatura da Marca */
+   /* Gestor: Vinho / Bordô Intenso Assinatura da Marca */
    --color-role-gestor: #4D0909;
    --color-role-gestor-hover: #3B0606;
   --color-role-gestor-bg: #F6E6E8;
   --color-role-gestor-border: #E5BBC2;
    --color-role-gestor-text: #4D0909;
 
-  /* ✍️ Escritor: Eucalipto / Sage Green Pastel */
+   /* Escritor: Eucalipto / Sage Green Pastel */
   --color-role-escritor: #446E5C;
   --color-role-escritor-hover: #37594A;
   --color-role-escritor-bg: #EDF5F1;
   --color-role-escritor-border: #C8DFD4;
   --color-role-escritor-text: #2D5242;
 
-  /* 🔎 Revisor: Areia / Ocre Suave Pastel */
+   /* Revisor: Areia / Ocre Suave Pastel */
   --color-role-revisor: #8C6B3E;
   --color-role-revisor-hover: #75572F;
   --color-role-revisor-bg: #F9F4EB;

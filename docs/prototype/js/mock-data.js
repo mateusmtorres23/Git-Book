@@ -16,7 +16,7 @@
       email: 'lucas.gestor@gitbook.com',
       role: 'gestor',
       roleTitle: 'Gestor Editorial',
-      avatar: '👑'
+      avatar: 'crown'
     },
     {
       id: 'usr-2',
@@ -24,15 +24,7 @@
       email: 'joao.autor@gitbook.com',
       role: 'escritor',
       roleTitle: 'Escritor Colaborador',
-      avatar: '✍️'
-    },
-    {
-      id: 'usr-3',
-      name: 'Maria Fernandes',
-      email: 'maria.autora@gitbook.com',
-      role: 'escritor',
-      roleTitle: 'Escritora Colaboradora',
-      avatar: '✍️'
+      avatar: 'pen'
     },
     {
       id: 'usr-4',
@@ -40,7 +32,7 @@
       email: 'beatriz.revisora@gitbook.com',
       role: 'revisor',
       roleTitle: 'Revisora de Texto',
-      avatar: '🔎'
+      avatar: 'inspect'
     },
     {
       id: 'usr-5',
@@ -48,7 +40,7 @@
       email: 'pedro.revisor@gitbook.com',
       role: 'revisor',
       roleTitle: 'Revisor de Estilo',
-      avatar: '🔎'
+      avatar: 'inspect'
     }
   ];
 
@@ -159,6 +151,41 @@
     '2': { requireMergeRequest: true, requireReviewerSuggestion: true, deleteBranchAfterMerge: true, visibility: 'private' },
     '3': { requireMergeRequest: true, requireReviewerSuggestion: false, deleteBranchAfterMerge: false, visibility: 'public' }
   };
+
+  const now = Date.now();
+  const deadlines = [
+    {
+      id: 'deadline-1',
+      bookId: '1',
+      title: 'Entregável do Capítulo 3 — Cenas do Subsolo',
+      description: 'Finalizar a revisão da sequência da câmara central e preparar a entrega para a branch principal.',
+      dueAt: new Date(now + (3 * 24 * 60 * 60 * 1000) + (4 * 60 * 60 * 1000)).toISOString(),
+      assigneeId: 'usr-2',
+      status: 'in_progress',
+      createdAt: new Date(now).toISOString()
+    },
+    {
+      id: 'deadline-2',
+      bookId: '1',
+      title: 'Conferência de continuidade — Capítulos 1 e 2',
+      description: 'Validar nomes, referências à memória versionada e a cronologia entre os dois capítulos iniciais.',
+      dueAt: new Date(now - (2 * 24 * 60 * 60 * 1000)).toISOString(),
+      assigneeId: 'usr-4',
+      status: 'in_progress',
+      createdAt: new Date(now).toISOString()
+    },
+    {
+      id: 'deadline-3',
+      bookId: '1',
+      title: 'Sinopse da versão consolidada',
+      description: 'Revisar e aprovar a sinopse curta usada no catálogo público da obra.',
+      dueAt: new Date(now - (1 * 24 * 60 * 60 * 1000)).toISOString(),
+      assigneeId: null,
+      status: 'completed',
+      completedAt: new Date(now - (12 * 60 * 60 * 1000)).toISOString(),
+      createdAt: new Date(now).toISOString()
+    }
+  ];
 
   // ==========================================================================
   // 3. Branches Mockadas
@@ -408,6 +435,7 @@
     getMergeRequestById: (id) => mergeRequests.find((m) => String(m.id) === String(id)) || null,
     getSuggestions: (bookId) => suggestions.filter((s) => !bookId || String(s.bookId) === String(bookId)),
     getSuggestionById: (id) => suggestions.find((s) => String(s.id) === String(id)) || null,
+    getDeadlines: (bookId) => deadlines.filter((d) => !bookId || String(d.bookId) === String(bookId)),
     getBookCollaborators: (bookId) => (bookCollaborators[String(bookId)] || []).map((collaborator) => {
       const user = users.find((item) => item.id === collaborator.userId);
       return user ? { ...user, role: collaborator.role, roleTitle: collaborator.role === 'escritor' ? 'Escritor Colaborador' : 'Revisor de Texto' } : null;
@@ -446,7 +474,7 @@
         email: userData.email,
         role: 'colaborador',
         roleTitle: 'Colaborador Global',
-        avatar: '👤'
+        avatar: 'user'
       };
       users.push(newUser);
       currentUser = { ...newUser };
@@ -464,7 +492,7 @@
         email: userData.email,
         role: userData.role,
         roleTitle: userData.role === 'escritor' ? 'Escritor Colaborador' : 'Revisor de Texto',
-        avatar: userData.role === 'escritor' ? '✍️' : '🔎'
+        avatar: userData.role === 'escritor' ? 'pen' : 'inspect'
       };
       if (!existingUser) users.push(user);
       if (!bookCollaborators[key].some((item) => item.userId === user.id)) {
@@ -582,6 +610,52 @@
       if (book) book.stats.commitsCount += 1;
       notify('commit_added', newCommit);
       return newCommit;
+    },
+
+    addDeadline: (bookId, deadlineData) => {
+      const newDeadline = {
+        id: `deadline-${Date.now()}`,
+        bookId: String(bookId),
+        title: deadlineData.title,
+        description: deadlineData.description || '',
+        dueAt: deadlineData.dueAt,
+        assigneeId: deadlineData.assigneeId || null,
+        status: 'in_progress',
+        createdAt: new Date().toISOString()
+      };
+      deadlines.unshift(newDeadline);
+      notify('deadline_added', newDeadline);
+      return newDeadline;
+    },
+
+    updateDeadlineStatus: (bookId, deadlineId, newStatus) => {
+      const deadline = deadlines.find((item) => String(item.bookId) === String(bookId) && String(item.id) === String(deadlineId));
+      if (!deadline) return null;
+      deadline.status = newStatus;
+      deadline.completedAt = newStatus === 'completed' ? new Date().toISOString() : null;
+      notify('deadline_updated', deadline);
+      return deadline;
+    },
+
+    updateDeadline: (bookId, deadlineId, updatedData) => {
+      const deadline = deadlines.find((item) => String(item.bookId) === String(bookId) && String(item.id) === String(deadlineId));
+      if (!deadline) return null;
+      Object.assign(deadline, {
+        title: updatedData.title,
+        description: updatedData.description || '',
+        dueAt: updatedData.dueAt,
+        assigneeId: updatedData.assigneeId || null
+      });
+      notify('deadline_updated', deadline);
+      return deadline;
+    },
+
+    deleteDeadline: (bookId, deadlineId) => {
+      const index = deadlines.findIndex((item) => String(item.bookId) === String(bookId) && String(item.id) === String(deadlineId));
+      if (index === -1) return false;
+      const [removedDeadline] = deadlines.splice(index, 1);
+      notify('deadline_deleted', removedDeadline);
+      return true;
     },
 
     addMergeRequest: (mrData) => {

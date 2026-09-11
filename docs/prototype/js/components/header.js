@@ -23,7 +23,7 @@
       name: 'Lucas Mendes',
       email: 'lucas.gestor@gitbook.com',
       role: 'gestor',
-      avatar: '👑'
+      avatar: 'crown'
     };
 
     // Obter livro ativo se estiver no contexto de um livro (ex: #/books/:id...)

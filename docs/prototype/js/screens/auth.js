@@ -46,7 +46,7 @@
           <!-- Coluna Esquerda: Proposta de Valor e Contexto do Gitbook (Checklist Critério 1) -->
           <div class="auth-intro-pane">
             <div class="auth-intro-badge">
-              <span>🚀</span>
+              <span>${getIconSvg('rocket', 16)}</span>
               <span>Versão 1.0 — Protótipo SPA</span>
             </div>
 
@@ -257,7 +257,7 @@
 
         if (!email || !password) {
           if (errorEl) {
-            errorEl.textContent = '⚠️ Por favor, informe seu e-mail e senha para acessar.';
+            errorEl.innerHTML = `${getIconSvg('alert', 14)} Por favor, informe seu e-mail e senha para acessar.`;
             errorEl.style.display = 'block';
           }
           if (!email) emailInput.focus();
@@ -298,7 +298,7 @@
 
         if (!name || !email || !password) {
           if (errorEl) {
-            errorEl.textContent = '⚠️ Por favor, preencha todos os campos obrigatórios (nome, e-mail e senha).';
+            errorEl.innerHTML = `${getIconSvg('alert', 14)} Por favor, preencha todos os campos obrigatórios (nome, e-mail e senha).`;
             errorEl.style.display = 'block';
           }
           if (!name) nameInput.focus();
@@ -309,7 +309,7 @@
 
         if (password.length < 6) {
           if (errorEl) {
-            errorEl.textContent = '⚠️ A senha deve conter no mínimo 6 caracteres.';
+            errorEl.innerHTML = `${getIconSvg('alert', 14)} A senha deve conter no mínimo 6 caracteres.`;
             errorEl.style.display = 'block';
           }
           passInput.focus();
@@ -318,7 +318,7 @@
 
         if (password !== passwordConfirm) {
           if (errorEl) {
-            errorEl.textContent = '⚠️ As senhas digitadas não coincidem. Verifique a confirmação.';
+            errorEl.innerHTML = `${getIconSvg('alert', 14)} As senhas digitadas não coincidem. Verifique a confirmação.`;
             errorEl.style.display = 'block';
           }
           if (passConfirmInput) passConfirmInput.focus();

@@ -23,7 +23,7 @@
     if (!book) {
       container.innerHTML = `
         <div class="empty-state">
-          <div class="empty-state-icon">⚠️</div>
+          <div class="empty-state-icon">${getIconSvg('alert', 32)}</div>
           <h2 class="empty-state-title">Obra não encontrada</h2>
           <p class="empty-state-desc">O livro com identificador "${escapeHtml(bookId)}" não foi localizado no catálogo.</p>
           <a href="#/books" class="btn btn-secondary">Voltar ao Catálogo</a>
@@ -62,7 +62,7 @@
       heroActionBtnHtml = buttonComp ? buttonComp.createButton({
         text: 'Painel de Sugestões',
         variant: 'primary',
-        icon: '🔎',
+        icon: 'inspect',
         href: `#/books/${book.id}/suggestions`,
         id: 'btn-hub-open-suggestions'
       }) : `<a href="#/books/${book.id}/suggestions" class="btn btn-primary">Painel de Sugestões</a>`;
@@ -70,7 +70,7 @@
       heroActionBtnHtml = buttonComp ? buttonComp.createButton({
         text: 'Abrir no Editor',
         variant: 'primary',
-        icon: '✍️',
+        icon: 'pen',
         href: `#/books/${book.id}/editor`,
         id: 'btn-hub-open-editor'
       }) : `<a href="#/books/${book.id}/editor" class="btn btn-primary">Abrir no Editor</a>`;
@@ -81,7 +81,7 @@
       text: '+ Criar Minha Branch',
       variant: isWriter ? 'primary' : 'secondary',
       size: 'sm',
-      icon: '🌿',
+      icon: 'branch',
       id: 'btn-open-create-branch',
       attributes: isWriter ? 'title="Criar nova branch de escritor"' : 'title="Recomendado para o papel Escritor"'
     }) : '<button type="button" class="btn btn-secondary btn-sm" id="btn-open-create-branch">+ Criar Minha Branch</button>') : '';
@@ -323,15 +323,16 @@
     const isGestor = currentUser && currentUser.role === 'gestor';
 
     let tabs = [
-      { id: 'overview', label: 'Visão Geral', icon: '📖', href: `#/books/${bookId}`, badge: null },
-      { id: 'editor', label: 'Editor de Escrita', icon: '✍️', href: `#/books/${bookId}/editor`, badge: null },
-      { id: 'merges', label: 'Merge Requests', icon: '🔀', href: `#/books/${bookId}/merges`, badge: badges.pendingMerges },
-      { id: 'suggestions', label: 'Sugestões', icon: '🔎', href: `#/books/${bookId}/suggestions`, badge: badges.pendingSuggestions },
-      { id: 'history', label: 'Histórico', icon: '📜', href: `#/books/${bookId}/history`, badge: null }
+      { id: 'overview', label: 'Visão Geral', icon: 'book', href: `#/books/${bookId}`, badge: null },
+      { id: 'editor', label: 'Editor de Escrita', icon: 'pen', href: `#/books/${bookId}/editor`, badge: null },
+      { id: 'merges', label: 'Merge Requests', icon: 'merge', href: `#/books/${bookId}/merges`, badge: badges.pendingMerges },
+      { id: 'suggestions', label: 'Sugestões', icon: 'inspect', href: `#/books/${bookId}/suggestions`, badge: badges.pendingSuggestions },
+      { id: 'deadlines', label: 'Deadlines', icon: 'calendar', href: `#/books/${bookId}/deadlines`, badge: badges.pendingDeadlines },
+      { id: 'history', label: 'Histórico', icon: 'history', href: `#/books/${bookId}/history`, badge: null }
     ];
 
     if (isGestor) {
-      tabs.push({ id: 'settings', label: 'Configurações', icon: '⚙️', href: `#/books/${bookId}/settings`, badge: null });
+      tabs.push({ id: 'settings', label: 'Configurações', icon: 'settings', href: `#/books/${bookId}/settings`, badge: null });
     }
 
     // Revisor não deve ter acesso ao Editor de Escrita nem visualizar sua aba

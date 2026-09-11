@@ -26,7 +26,7 @@
     if (!book) {
       container.innerHTML = `
         <div class="empty-state">
-          <div class="empty-state-icon">⚠️</div>
+          <div class="empty-state-icon">${getIconSvg('alert', 32)}</div>
           <h2 class="empty-state-title">Obra não encontrada</h2>
           <p class="empty-state-desc">Não foi possível carregar os Merge Requests do livro informado.</p>
           <a href="#/books" class="btn btn-secondary">Voltar ao Catálogo</a>
@@ -60,7 +60,7 @@
       text: '+ Nova Solicitação',
       variant: 'primary',
       size: 'sm',
-      icon: '🔀',
+      icon: 'merge',
       href: `#/books/${book.id}/editor`,
       attributes: 'title="Ir ao Editor para solicitar merge de uma branch"'
     }) : `<a href="#/books/${book.id}/editor" class="btn btn-primary btn-sm">+ Nova Solicitação</a>`;
@@ -206,7 +206,7 @@
     if (!mr) {
       container.innerHTML = `
         <div class="empty-state">
-          <div class="empty-state-icon">⚠️</div>
+          <div class="empty-state-icon">${getIconSvg('alert', 32)}</div>
           <h2 class="empty-state-title">Merge Request não encontrado</h2>
           <p class="empty-state-desc">A solicitação de integração com ID "${escapeHtml(mergeId)}" não foi localizada.</p>
           <a href="#/books" class="btn btn-secondary">Voltar ao Catálogo</a>
@@ -480,7 +480,7 @@
               Você está navegando como <strong>${currentUser.name} (${currentUser.role})</strong>. Escritores e revisores têm permissão para acompanhar e auditar as propostas de merge, mas a consolidação na branch oficial (<code>${book.mainBranch}</code>) é prerrogativa exclusiva do Gestor.
             </div>
             <div style="margin-top: 10px; font-size: var(--font-size-xs); color: var(--color-primary-text);">
-              💡 Para simular a aprovação deste merge, alterne para o papel de <strong>Gestor</strong> no menu superior.
+              ${getIconSvg('lightbulb', 14)} Para simular a aprovação deste merge, alterne para o papel de <strong>Gestor</strong> no menu superior.
             </div>
           </div>
         </section>

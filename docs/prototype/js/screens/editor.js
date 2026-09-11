@@ -77,7 +77,7 @@
     if (!book) {
       container.innerHTML = `
         <div class="empty-state">
-          <div class="empty-state-icon">⚠️</div>
+          <div class="empty-state-icon">${getIconSvg('alert', 32)}</div>
           <h2 class="empty-state-title">Obra não encontrada</h2>
           <p class="empty-state-desc">O livro informado não foi localizado para edição.</p>
           <a href="#/books" class="btn btn-secondary">Voltar ao Catálogo</a>
@@ -125,7 +125,7 @@
       text: 'Sincronizar com main',
       variant: 'secondary',
       size: 'sm',
-      icon: '🔄',
+      icon: 'refresh',
       id: 'btn-sync-main',
       attributes: isMainBranch ? 'disabled title="Você já está na branch main"' : 'title="Trazer alterações da branch main"'
     }) : '<button type="button" class="btn btn-secondary btn-sm" id="btn-sync-main">Sincronizar com main</button>';
@@ -135,7 +135,7 @@
       text: 'Solicitar Merge',
       variant: 'primary',
       size: 'sm',
-      icon: '🔀',
+      icon: 'merge',
       id: 'btn-request-merge',
       attributes: isMainBranch ? 'disabled title="A branch main é a linha de destino, não solicita merge para si mesma"' : 'title="Enviar solicitações de merge para o Gestor"'
     }) : '<button type="button" class="btn btn-primary btn-sm" id="btn-request-merge">Solicitar Merge</button>';
@@ -153,7 +153,7 @@
       text: 'Salvar Commit',
       variant: 'primary',
       id: 'btn-save-commit',
-      icon: '💾',
+      icon: 'save',
       attributes: 'style="width: 100%; justify-content: center;"'
     }) : '<button type="button" class="btn btn-primary" id="btn-save-commit" style="width: 100%;">Salvar Commit</button>';
 
@@ -208,7 +208,7 @@
             <ul class="tree-chapter-list" id="tree-chapter-list">
               ${currentChapters.map((ch, idx) => `
                 <li class="tree-chapter-item ${ch.id === activeChapterId ? 'active' : ''}" data-chapter-id="${ch.id}">
-                  <span class="tree-item-icon">📄</span>
+                  <span class="tree-item-icon">${getIconSvg('file', 14)}</span>
                   <span class="tree-item-title">${escapeHtml(ch.title || `Capítulo ${idx + 1}`)}</span>
                 </li>
               `).join('')}
@@ -311,7 +311,7 @@
             <div id="commit-feedback-container"></div>
 
             <div style="font-size: var(--font-size-xs); color: var(--color-text-muted); line-height: 1.4; padding-top: var(--space-2); border-top: 1px solid var(--color-border-subtle);">
-              💡 <strong>Dica de Versionamento:</strong> Cada commit adiciona um bloco imutável ao histórico da sua branch. O Gestor poderá visualizar esse histórico ao avaliar seu futuro Merge Request.
+              ${getIconSvg('lightbulb', 14)} <strong>Dica de Versionamento:</strong> Cada commit adiciona um bloco imutável ao histórico da sua branch. O Gestor poderá visualizar esse histórico ao avaliar seu futuro Merge Request.
             </div>
           </aside>
         </div>
@@ -427,7 +427,7 @@
           if (feedbackContainer) {
             feedbackContainer.innerHTML = `
               <div style="color: var(--color-status-rejected-text); font-size: var(--font-size-xs); margin-top: 4px;">
-                ⚠️ Por favor, digite uma mensagem descritiva para o commit antes de salvar.
+                ${getIconSvg('alert', 14)} Por favor, digite uma mensagem descritiva para o commit antes de salvar.
               </div>
             `;
           }
@@ -528,7 +528,7 @@
                 </div>
 
                 <div style="padding: 10px; background: var(--color-bg-subtle); border-radius: var(--radius-md); font-size: var(--font-size-xs); color: var(--color-text-muted);">
-                  ℹ️ Sua solicitação será enviada para avaliação do Gestor (<strong>${book.managerName}</strong>). O diff completo será analisado no Passo 6 (T5).
+                  ${getIconSvg('info', 14)} Sua solicitação será enviada para avaliação do Gestor (<strong>${book.managerName}</strong>). O diff completo será analisado no Passo 6 (T5).
                 </div>
 
                 <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">

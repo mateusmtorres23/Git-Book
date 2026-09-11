@@ -99,6 +99,15 @@
       stepTarget: 'Passo 8',
       showHeader: true,
       permissions: { gestor: 'Acesso Total', escritor: 'Visualizar', revisor: 'Visualizar' }
+    },
+    {
+      path: '/books/:id/deadlines',
+      screenId: 'T9',
+      title: 'Prazos e Entregas (Deadlines)',
+      description: 'Acompanhamento de entregas e prazos da obra.',
+      stepTarget: 'T9',
+      showHeader: true,
+      permissions: { gestor: 'Criar / Editar / Excluir', escritor: 'Visualizar / Concluir próprias tarefas', revisor: 'Criar / Editar / Excluir' }
     }
   ];
 
@@ -210,6 +219,8 @@
       window.Gitbook.screens.suggestions.render(appContainer, params);
     } else if (route.screenId === 'T7' && window.Gitbook.screens && window.Gitbook.screens.history) {
       window.Gitbook.screens.history.render(appContainer, params);
+    } else if (route.screenId === 'T9' && window.Gitbook.screens && window.Gitbook.screens.deadlines) {
+      window.Gitbook.screens.deadlines.render(appContainer, params);
     } else {
       // Casca da rota para telas ainda não implementadas nos próximos passos
       renderPlaceholderScreen(appContainer, route, params, rawPath);
@@ -334,14 +345,14 @@
 
         <div class="access-restricted-container">
           <div class="access-restricted-card">
-            <div class="access-restricted-icon-box">🚫</div>
+            <div class="access-restricted-icon-box">${window.Gitbook.icons ? window.Gitbook.icons.get('block', { size: 32 }) : ''}</div>
             <h1 class="access-restricted-title">${title}</h1>
             <p class="access-restricted-desc">
               ${description || 'O papel atual não possui permissão para acessar este ambiente.'}
             </p>
 
             <div class="access-restricted-info">
-              <div>💡 <strong>Como colaborar nesta obra (${escapeHtml(bookTitle)}):</strong></div>
+              <div>${window.Gitbook.icons ? window.Gitbook.icons.get('lightbulb', { size: 14 }) : ''} <strong>Como colaborar nesta obra (${escapeHtml(bookTitle)}):</strong></div>
               <ul style="margin-top: 6px; padding-left: 20px; line-height: 1.6;">
                 <li>${isSettingsDenied ? 'Volte ao Hub da Obra para continuar navegando pelos módulos disponíveis para o seu papel.' : `Acesse o <strong>Painel de Sugestões</strong> para propor correções no texto oficial (${book ? book.mainBranch : 'main'}).`}</li>
                 <li>Alterne o papel simulado no menu superior para testar a visão de Gestor.</li>

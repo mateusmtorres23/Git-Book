@@ -109,7 +109,7 @@
           <div class="history-hero-top">
             <div class="history-hero-title-group">
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="history-icon-badge">📜</span>
+                <span class="history-icon-badge">${getIconSvg('history', 18)}</span>
                 <h1 class="history-hero-title">Histórico de Versionamento e Commits</h1>
               </div>
               <p class="history-hero-subtitle">
@@ -173,7 +173,7 @@
 
             <!-- Filtro por Autor -->
             <div class="filter-field">
-              <label for="filter-author-select" class="filter-label">👤 Filtrar por Autor:</label>
+              <label for="filter-author-select" class="filter-label">${getIconSvg('user', 14)} Filtrar por Autor:</label>
               <select id="filter-author-select" class="form-select filter-select">
                 <option value="all" ${currentFilters.author === 'all' ? 'selected' : ''}>Todos os Autores (${authorsList.length})</option>
                 ${authorsList.map((authorName) => {
@@ -361,7 +361,7 @@
                   title="Clique para copiar hash do commit"
                 >
                   <code>${escapeHtml(commit.hash)}</code>
-                  <span class="copy-icon">📋</span>
+                  <span class="copy-icon">${getIconSvg('clipboard', 14)}</span>
                 </button>
               </div>
 
@@ -372,7 +372,7 @@
                   data-hash="${escapeHtml(commit.hash)}"
                   title="Examinar o snapshot e conteúdo registrado neste commit"
                 >
-                  <span>👁️</span> Visualizar Versão
+                  <span>${getIconSvg('eye', 14)}</span> Visualizar Versão
                 </button>
               </div>
             </footer>
@@ -503,7 +503,7 @@
         <div class="snapshot-text-card">
           <div class="snapshot-text-header">
             <span style="font-size: 0.8rem; font-weight: bold; text-transform: uppercase; color: var(--color-text-muted);">
-              📖 Conteúdo no Commit: ${escapeHtml(chapter1.title)}
+              ${getIconSvg('book', 14)} Conteúdo no Commit: ${escapeHtml(chapter1.title)}
             </span>
             <span class="badge badge-status-approved" style="font-size: 0.7rem;">Versão Rastreada</span>
           </div>

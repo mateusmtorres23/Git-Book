@@ -67,7 +67,7 @@
       text: '+ Adicionar Sugestão',
       variant: 'primary',
       size: 'sm',
-      icon: '🔎',
+      icon: 'inspect',
       id: 'btn-open-add-suggestion',
       attributes: 'title="Criar nova sugestão no trecho selecionado"'
     }) : '<button type="button" class="btn btn-primary btn-sm" id="btn-open-add-suggestion">+ Adicionar Sugestão</button>';
@@ -99,7 +99,7 @@
           </div>
 
           <div style="font-size: var(--font-size-xs); color: var(--color-text-muted); background: var(--color-bg-subtle); padding: 4px 10px; border-radius: var(--radius-sm); border: 1px solid var(--color-border-subtle);">
-            💡 Alterne o papel no menu do topo para validar as diferentes visões.
+            ${getIconSvg('lightbulb', 14)} Alterne o papel no menu do topo para validar as diferentes visões.
           </div>
         </aside>
 
@@ -361,7 +361,7 @@
 
         if (!targetSnippet || !suggestedText) {
           if (errorEl) {
-            errorEl.textContent = '⚠️ Por favor, informe o trecho original e a nova redação sugerida.';
+            errorEl.innerHTML = `${getIconSvg('alert', 14)} Por favor, informe o trecho original e a nova redação sugerida.`;
             errorEl.style.display = 'block';
           }
           if (!targetSnippet) document.getElementById('sug-target-snippet').focus();

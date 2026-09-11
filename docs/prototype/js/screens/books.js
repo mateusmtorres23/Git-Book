@@ -43,7 +43,7 @@
       text: '+ Novo Livro',
       variant: 'primary',
       id: 'btn-open-create-book',
-      icon: '✨',
+      icon: 'sparkles',
       className: isGestor ? '' : 'btn-secondary',
       attributes: isGestor ? 'title="Criar nova obra (Papel Gestor)"' : 'title="Requer papel de Gestor para criar obras"'
     }) : '<button type="button" class="btn btn-primary" id="btn-open-create-book">+ Novo Livro</button>';
@@ -276,7 +276,7 @@
         </div>
 
         <div style="padding: 12px; background-color: var(--color-bg-subtle); border-radius: var(--radius-md); border: 1px solid var(--color-border); font-size: var(--font-size-xs); color: var(--color-text-muted);">
-          ℹ️ Ao inicializar a obra, o sistema gerará automaticamente a branch protegida <code>main</code> e criará o snapshot inicial do repositório em seu nome (<strong>${currentUser.name}</strong>).
+          ${window.Gitbook.icons ? window.Gitbook.icons.get('info', { size: 14 }) : ''} Ao inicializar a obra, o sistema gerará automaticamente a branch protegida <code>main</code> e criará o snapshot inicial do repositório em seu nome (<strong>${currentUser.name}</strong>).
         </div>
 
         <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
@@ -310,7 +310,7 @@
           titleInput.focus();
           titleInput.style.borderColor = 'var(--color-status-rejected)';
           if (errorEl) {
-            errorEl.textContent = '⚠️ O título da obra é obrigatório para inicializar o repositório.';
+            errorEl.innerHTML = `${window.Gitbook.icons ? window.Gitbook.icons.get('alert', { size: 14 }) : ''} O título da obra é obrigatório para inicializar o repositório.`;
             errorEl.style.display = 'block';
           }
           return;
